@@ -1,24 +1,41 @@
 import org.joml.Vector2i;
 import world.AStarAlg;
+import world.WorldMap;
 
 import java.util.Random;
 
 public class AStarTest {
     public static void main(String[] args) throws Exception {
         Random rand = new Random();
+
+        WorldMap map = new WorldMap();
+
+        map.getTile(5,0).wall = true;
+        map.getTile(5,1).wall = true;
+        map.getTile(5,2).wall = true;
+        map.getTile(5,3).wall = true;
+        map.getTile(5,4).wall = true;
+        map.getTile(5,5).wall = true;
+        map.getTile(5,6).wall = true;
+        map.getTile(5,7).wall = true;
+        map.getTile(5,8).wall = true;
+        map.getTile(5,9).wall = true;
+
         for(int i = 0;i<100;i++) {
-            int x1 = rand.nextInt(200)+10000;
-            int y1 = rand.nextInt(200)+10000;
-            int x2 = rand.nextInt(200)+10000;
-            int y2 = rand.nextInt(200)+10000;
+            int x1 = -1;
+            int y1 = rand.nextInt(10);
+            int x2 = 10;
+            int y2 = rand.nextInt(10);
 
             long time = System.nanoTime();
 
             System.out.println(String.format("Seach for path %d from [%d|%d] to [%d|%d]",i,x1,y1,x2,y2));
-            new AStarAlg(new Vector2i(x1, y1), new Vector2i(x2, y2));
+            AStarAlg a = new AStarAlg(new Vector2i(x1, y1), new Vector2i(x2, y2),map);
 
             long delta = System.nanoTime()-time;
             float fps = 1000000000f/delta;
+
+            a.printResult();
 
             System.out.println(String.format("Time: %dns, theoretical FPS: %f",delta,fps));
         }

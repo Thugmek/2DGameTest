@@ -26,7 +26,7 @@ public class Window {
         glfwWindowHint(GLFW_REFRESH_RATE, mode.refreshRate());
 
         //long win = glfwCreateWindow(mode.width(),mode.height(),"LWJGL project",glfwGetPrimaryMonitor(),0);
-        id = glfwCreateWindow(800,600,"LWJGL project",0,0);
+        id = glfwCreateWindow(800,800,"LWJGL project",0,0);
 
         glfwShowWindow(id);
         glfwMakeContextCurrent(id);

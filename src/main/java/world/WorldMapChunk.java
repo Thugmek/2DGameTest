@@ -14,6 +14,7 @@ public class WorldMapChunk {
     private int y;
 
     private Model model;
+    private Model model2;
 
     public WorldMapChunk(int x, int y){
         this.x = x;
@@ -27,11 +28,19 @@ public class WorldMapChunk {
         generateModel();
     }
 
+    public WorldMapTile getTile(int x, int y) {
+        return tiles[x][y];
+    }
+
     public void generateModel(){
 
         float[] verts = new float[CHUNK_SIZE*CHUNK_SIZE*6*3];
         float[] cols = new float[CHUNK_SIZE*CHUNK_SIZE*6*3];
         float[] uvs = new float[CHUNK_SIZE*CHUNK_SIZE*6*2];
+
+        float[] verts2 = new float[CHUNK_SIZE*CHUNK_SIZE*6*3];
+        float[] cols2 = new float[CHUNK_SIZE*CHUNK_SIZE*6*3];
+        float[] uvs2 = new float[CHUNK_SIZE*CHUNK_SIZE*6*2];
 
         for(int i = 0;i<CHUNK_SIZE;i++){
             for(int j = 0;j<CHUNK_SIZE;j++){
@@ -62,23 +71,25 @@ public class WorldMapChunk {
                 verts[index+16] = 1+j;
                 verts[index+17] = 0;
 
-                uvs[index2] = 0+i;
-                uvs[index2+1] = 0+j;
+                if(!tiles[i][j].wall){
+                    uvs[index2] = 0 + i;
+                    uvs[index2 + 1] = 0 + j;
 
-                uvs[index2+2] = 1+i;
-                uvs[index2+3] = 0+j;
+                    uvs[index2 + 2] = 1 + i;
+                    uvs[index2 + 3] = 0 + j;
 
-                uvs[index2+4] = 0+i;
-                uvs[index2+5] = 1+j;
+                    uvs[index2 + 4] = 0 + i;
+                    uvs[index2 + 5] = 1 + j;
 
-                uvs[index2+6] = 1+i;
-                uvs[index2+7] = 1+j;
+                    uvs[index2 + 6] = 1 + i;
+                    uvs[index2 + 7] = 1 + j;
 
-                uvs[index2+8] = 1+i;
-                uvs[index2+9] = 0+j;
+                    uvs[index2 + 8] = 1 + i;
+                    uvs[index2 + 9] = 0 + j;
 
-                uvs[index2+10] = 0+i;
-                uvs[index2+11] = 1+j;
+                    uvs[index2 + 10] = 0 + i;
+                    uvs[index2 + 11] = 1 + j;
+                }
 
                 cols[index] = 0;
                 cols[index+1] = 0;

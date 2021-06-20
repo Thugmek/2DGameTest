@@ -11,6 +11,8 @@ import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL14.GL_MIRRORED_REPEAT;
 
 public class Texture {
@@ -29,7 +31,6 @@ public class Texture {
 
             ByteBuffer pixels = STBImage.stbi_load("src\\main\\resources\\"+texture,x,y,ch,4);
             if(pixels == null) System.out.println("Pixels are null!!!");
-            //ByteBuffer pixels = BufferUtils.createByteBuffer(1000);
 
             width = x[0];
             height = y[0];
@@ -48,6 +49,11 @@ public class Texture {
         }catch(Exception e){
 
         }
+    }
+
+    public void bind(){
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D,id);
     }
 
     public int getId(){

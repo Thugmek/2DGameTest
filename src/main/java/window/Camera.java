@@ -11,7 +11,7 @@ public class Camera {
 
     public Camera(){
         pos = new Vector2f(0,0);
-        scale = 0.2f;
+        scale = 0.07f;
     }
 
     public void update(float delta){

@@ -13,13 +13,16 @@ public class AStarAlg {
     private Map<Integer,Map<Integer,AlgTile>> heads;
     private List<AlgTile> headsList;
     private boolean solved = false;
+    private WorldMap worldMap;
 
     private List<AlgTile> result;
+    private List<Vector2i> resultVecs;
 
 
-    public AStarAlg(Vector2i start, Vector2i end) throws Exception {
+    public AStarAlg(Vector2i start, Vector2i end, WorldMap worldMap) {
         this.start = start;
         this.end = end;
+        this.worldMap = worldMap;
 
         map = new HashMap<>();
 
@@ -65,7 +68,10 @@ public class AStarAlg {
         result = new LinkedList<>();
         result.add(map.get(end.x).get(end.y));
 
-        while(result.get(0).pos.x != start.x && result.get(0).pos.y != start.y){
+        resultVecs = new LinkedList<>();
+        resultVecs.add(result.get(0).pos);
+
+        while(result.get(0).pos.x != start.x || result.get(0).pos.y != start.y){
             float min = result.get(0).a;
             int minX = result.get(0).pos.x;
             int minY = result.get(0).pos.y;
@@ -85,10 +91,11 @@ public class AStarAlg {
             }
 
             result.add(0,map.get(minX).get(minY));
+            resultVecs.add(0,result.get(0).pos);
         }
     }
 
-    private AlgTile findBestHead() throws Exception {
+    private AlgTile findBestHead() {
         float min = Float.MAX_VALUE;
         float minH = Float.MAX_VALUE;
         AlgTile minTile = null;
@@ -107,7 +114,7 @@ public class AStarAlg {
 
     private void solveTile(int x, int y, AlgTile prev){
 
-        if(false/*wall*/) return;
+        if(worldMap.getTile(x,y).wall) return;
 
         AlgTile val = new AlgTile();
         val.pos = new Vector2i(x,y);
@@ -165,5 +172,16 @@ public class AStarAlg {
         public String toString(){
             return String.format("Distance: %f, heuristic: %f, pos[%d|%d]",a,h,pos.x,pos.y);
         }
+    }
+
+    public void printResult(){
+        System.out.print("Path:");
+        for (Vector2i v:resultVecs) {
+            System.out.print(String.format(" [%d:%d]",v.x,v.y));
+        }
+    }
+
+    public List<Vector2i> getResult(){
+        return resultVecs;
     }
 }
