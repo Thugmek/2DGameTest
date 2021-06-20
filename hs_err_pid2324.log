@@ -68,7 +68,7 @@ C  [lwjgl_opengl.dll+0xca55]
 j  org.lwjgl.opengl.GL11C.glTexImage2D(IIIIIIIILjava/nio/ByteBuffer;)V+17
 j  org.lwjgl.opengl.GL11.glTexImage2D(IIIIIIIILjava/nio/ByteBuffer;)V+14
 j  resources.Texture.<init>()V+104
-j  Game.main([Ljava/lang/String;)V+80
+j  runners.Game.main([Ljava/lang/String;)V+80
 v  ~StubRoutines::call_stub
 V  [jvm.dll+0x165654]
 V  [jvm.dll+0x235f6b]
@@ -82,7 +82,7 @@ j  org.lwjgl.opengl.GL11C.nglTexImage2D(IIIIIIIIJ)V+0
 j  org.lwjgl.opengl.GL11C.glTexImage2D(IIIIIIIILjava/nio/ByteBuffer;)V+17
 j  org.lwjgl.opengl.GL11.glTexImage2D(IIIIIIIILjava/nio/ByteBuffer;)V+14
 j  resources.Texture.<init>()V+104
-j  Game.main([Ljava/lang/String;)V+80
+j  runners.Game.main([Ljava/lang/String;)V+80
 v  ~StubRoutines::call_stub
 
 ---------------  P R O C E S S  ---------------
@@ -343,7 +343,7 @@ Dynamic libraries:
 
 VM Arguments:
 jvm_args: -Dfile.encoding=windows-1250 -Duser.country=CZ -Duser.language=cs -Duser.variant 
-java_command: Game
+java_command: runners.Game
 java_class_path (initial): C:\Users\Thugmek\Documents\2DGameTest\build\classes\java\main;C:\Users\Thugmek\Documents\2DGameTest\build\resources\main;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-app-1.82.1-javadoc.jar;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-app-1.82.1-sources.jar;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-app-1.82.1.jar;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-binding-1.82.1-sources.jar;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-binding-1.82.1.jar;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-lwjgl3-1.82.1-javadoc.jar;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-lwjgl3-1.82.1-sources.jar;C:\Users\Thugmek\Documents\2DGameTest\libs\imgui-lwjgl3-1.82.1.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.joml\joml\1.9.2\b9db0f365d01b70d99a7a36819f42211b2f9bcf8\joml-1.9.2.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-assimp\3.2.3\f62aa07a20afbdd3097efc296c4841e0d29700eb\lwjgl-assimp-3.2.3.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-assimp\3.2.3\334b4051cf121e2ef98e13230d4232e3eabe42f6\lwjgl-assimp-3.2.3-natives-windows-x86.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-bgfx\3.2.3\433883c4040fa8df47244dffa1d42c96ce2143de\lwjgl-bgfx-3.2.3.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-bgfx\3.2.3\be8a92ed5c29fe044cd341202b33ed1e508eab65\lwjgl-bgfx-3.2.3-natives-windows-x86.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-cuda\3.2.3\fb91f3aaa29e69eee7f1314a63d3e3068ad138e4\lwjgl-cuda-3.2.3.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-egl\3.2.3\45ad689a4346fac69d4e8696fa02aaa98f0ea196\lwjgl-egl-3.2.3.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-glfw\3.2.3\5e520d5c290c8b012545a8d34fa5db5ab051ea53\lwjgl-glfw-3.2.3.jar;C:\Users\Thugmek\.gradle\caches\modules-2\files-2.1\org.lwjgl\lwjgl-glfw\3.2.3\795d81329f65679ee6d299373cbea7fffc56b6ed\
 Launcher Type: SUN_STANDARD
 
@@ -367,6 +367,6 @@ Memory: 4k page, physical 16580952k(6996336k free), swap 44842492k(29029756k fre
 vm_info: Java HotSpot(TM) Client VM (25.261-b12) for windows-x86 JRE (1.8.0_261-b12), built on Jun 18 2020 06:57:43 by "" with unknown MS VC++:1916
 
 time: Fri Jun 18 17:21:59 2021
-timezone: Støední Evropa (letní èas)
+timezone: Stï¿½ednï¿½ Evropa (letnï¿½ ï¿½as)
 elapsed time: 0 seconds (0d 0h 0m 0s)
 

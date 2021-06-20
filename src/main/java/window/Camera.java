@@ -4,6 +4,7 @@ import input.KeyboardInput;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 import resources.Shader;
+import runners.Game;
 
 public class Camera {
     Vector2f pos;
@@ -39,6 +40,7 @@ public class Camera {
     public void forShader(Shader shader){
         shader.bind();
 
+        shader.setAspectRatio(Game.getWindow().getAspectRatio());
         shader.setCamePos(pos);
         shader.setCameraZoom(scale);
         shader.unbind();

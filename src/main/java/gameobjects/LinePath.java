@@ -68,7 +68,7 @@ public class LinePath {
     }
 
     public void finalize(){
-        System.out.println("finalize: " + vb_id);
+        //System.out.println("finalize: " + vb_id);
         GarbageCollectionUtils.getBuffersList().add(vb_id);
     }
 }

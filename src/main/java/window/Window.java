@@ -15,6 +15,10 @@ public class Window {
     private long time;
     private float delta = 0.0000001f;
 
+    private int width = 800;
+    private int height = 800;
+    private float aspectRatio;
+
     public Window(){
         glfwInit();
 
@@ -25,8 +29,12 @@ public class Window {
         glfwWindowHint(GLFW_BLUE_BITS, mode.blueBits());
         glfwWindowHint(GLFW_REFRESH_RATE, mode.refreshRate());
 
+        width = mode.width();
+        height = mode.height();
+        aspectRatio = width/(float)height;
+
         //long win = glfwCreateWindow(mode.width(),mode.height(),"LWJGL project",glfwGetPrimaryMonitor(),0);
-        id = glfwCreateWindow(800,800,"LWJGL project",0,0);
+        id = glfwCreateWindow(width,height,"LWJGL project",glfwGetPrimaryMonitor(),0);
 
         glfwShowWindow(id);
         glfwMakeContextCurrent(id);
@@ -46,10 +54,6 @@ public class Window {
         delta = (newTime - time)/1000000.0f;
         time = newTime;
         glfwPollEvents();
-
-        if(KeyboardInput.getKey(GLFW_KEY_ESCAPE) == 1){
-            glfwSetWindowShouldClose(id,true);
-        }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
@@ -75,5 +79,17 @@ public class Window {
 
     public float getDelta() {
         return delta;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public float getAspectRatio(){
+        return aspectRatio;
     }
 }

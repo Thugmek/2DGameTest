@@ -1,3 +1,5 @@
+package runners;
+
 import org.joml.Vector2i;
 import world.AStarAlg;
 import world.WorldMap;

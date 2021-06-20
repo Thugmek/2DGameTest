@@ -17,6 +17,7 @@ public class Shader {
     private int cameraPos;
     private int cameraZoom;
     private int objectPos;
+    private int aspectRatio;
 
     public Shader() throws Exception {
         programId = glCreateProgram();
@@ -82,6 +83,7 @@ public class Shader {
         cameraPos = glGetUniformLocation(programId,"cameraPos");
         cameraZoom = glGetUniformLocation(programId,"cameraZoom");
         objectPos = glGetUniformLocation(programId,"objectPos");
+        aspectRatio = glGetUniformLocation(programId,"aspectRatio");
 
     }
 
@@ -124,5 +126,8 @@ public class Shader {
     }
     public void setObjectPos(Vector2f pos){
         glUniform2f(objectPos,pos.x,pos.y);
+    }
+    public void setAspectRatio(float ar){
+        glUniform1f(aspectRatio,ar);
     }
 }

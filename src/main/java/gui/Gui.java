@@ -1,6 +1,6 @@
 package gui;
 
-import imgui.ImGui;
+import imgui.*;
 import imgui.app.Color;
 import imgui.app.Configuration;
 import imgui.flag.ImGuiConfigFlags;
@@ -12,11 +12,15 @@ import org.lwjgl.glfw.GLFW;
 import java.util.Objects;
 
 public class Gui {
+
+    private BottomMenu bottomMenu;
+    private PauseMenu pauseMenu;
+
+    private ImFont font;
+
     private final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
-
     private String glslVersion = null;
-
     /**
      * Pointer to the native GLFW window.
      */
@@ -28,7 +32,12 @@ public class Gui {
     protected final Color colorBg = new Color(.5f, .5f, .5f, 1);
 
     public Gui(long window){
+
         handle = window;
+        bottomMenu = new BottomMenu();
+        pauseMenu = new PauseMenu();
+        //ImGui.getIO().getFonts().addFontDefault();
+        //font.
     }
 
     /**
@@ -39,6 +48,8 @@ public class Gui {
     public void init(final Configuration config) {
         //initWindow(config);
         initImGui(config);
+        font = ImGui.getIO().getFonts().addFontDefault();
+        font.setScale(2);
         imGuiGlfw.init(handle, true);
         imGuiGl3.init(glslVersion);
     }
@@ -89,16 +100,10 @@ public class Gui {
      * Method to be overridden by user to provide main application logic.
      */
     private void process(){
-        ImGui.setNextWindowPos(0,0);
-        ImGui.setNextWindowSize(100,100);
-        ImGui.begin("Window");
-        ImGui.text("Hello, World!");
-        ImGui.plotLines("Ahoj", new float[]{0, 1, 0, 2, 1, 3, 2, 1, 5, 0}, 10);
-        ImGui.end();
-
-        ImGui.begin("Hello2");
-        ImGui.text("Hello, World!");
-        ImGui.end();
+        ImGui.pushFont(font);
+        bottomMenu.render();
+        pauseMenu.render();
+        ImGui.popFont();
     }
 
     /**

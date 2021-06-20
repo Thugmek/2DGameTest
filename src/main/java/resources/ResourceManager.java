@@ -9,6 +9,7 @@ import java.util.Hashtable;
 public class ResourceManager {
 
     private static Dictionary<String,Shader> shaders = new Hashtable<>();
+    private static Dictionary<String,Texture> textures = new Hashtable<>();
 
     public static Shader getShader(String name){
         return shaders.get(name);
@@ -39,6 +40,14 @@ public class ResourceManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void loadTexture(String name, String file){
+        textures.put(name, new Texture(file));
+    }
+
+    public static Texture getTexture(String name){
+        return textures.get(name);
     }
 
     private static String loadString(String filePath)
