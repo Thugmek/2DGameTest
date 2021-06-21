@@ -26,10 +26,14 @@ public class Cursor {
         });
 
         model.setShader(ResourceManager.getShader("shader"));
-        model.setPos(new Vector2f(3,5));
+        model.setPos(new Vector2f(0,0));
     }
 
     public void render(){
         model.render();
+    }
+
+    public void setPos(Vector2f pos){
+        model.setPos(pos);
     }
 }

@@ -10,7 +10,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class PauseMenu {
-    private static ImBoolean active = new ImBoolean(true);
+    private static ImBoolean active = new ImBoolean(false);
     private static boolean deadkey = false;
 
     public void render(){

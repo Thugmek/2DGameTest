@@ -1,8 +1,10 @@
 package runners;
 
 import gameobjects.*;
+import gui.DevStatsWindow;
 import gui.Gui;
 import gui.PauseMenu;
+import input.CursorInput;
 import input.KeyboardInput;
 import input.MouseInput;
 import org.joml.Vector2i;
@@ -26,6 +28,7 @@ public class Game {
 
     public static Random ran = new Random();
     private static Window window;
+    public static Camera cam;
 
     public static void main(String[] args) {
         Window w = new Window();
@@ -44,9 +47,7 @@ public class Game {
             }
         }
 
-        Gui g = new Gui(w.getId());
-
-        g.init(new Configuration());
+        Gui.init(new Configuration(),w.getId());
 
         setMap(map);
 
@@ -60,20 +61,27 @@ public class Game {
         ResourceManager.loadTexture("cursor","sprites\\cursor.png");
         ResourceManager.loadTexture("cat","sprites\\cat.png");
 
+        CursorInput.init();
+
         List<Entity> cats = new LinkedList<>();
 
-        for(int i = 0;i<3;i++){
+        for(int i = 0;i<100;i++){
             cats.add(new Entity(new Sprite(ResourceManager.getTexture("cat")),map));
         }
 
         ResourceManager.getShader("shader").setUniform1i("ourTexture",0 );
 
         Camera c = new Camera();
+        cam = c;
 
         Cursor cur = new Cursor();
 
         while(!w.shouldClose()){
             System.out.println(1/w.getDelta());
+
+            DevStatsWindow.fps.add(1/w.getDelta());
+
+            CursorInput.update();
 
             if(!PauseMenu.getPaused()) {
                 c.update(w.getDelta());
@@ -94,10 +102,9 @@ public class Game {
                 e.render();
             }
 
-            glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D,t2.getId());
-            cur.render();
+            CursorInput.render();
 
-            g.run();
+            Gui.run();
 
             w.renderEnd();
             GarbageCollectionUtils.update();

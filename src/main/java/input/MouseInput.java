@@ -51,6 +51,17 @@ public class MouseInput {
         return pos;
     }
 
+    public static Vector2f getPos(){
+
+        DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
+        DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
+        glfwGetCursorPos(window, x, y);
+
+        Vector2f pos = new Vector2f((float)x.get(),(float)y.get());
+
+        return pos;
+    }
+
     public static int getMouseButton(int button){
         return glfwGetMouseButton(window,button);
     }
