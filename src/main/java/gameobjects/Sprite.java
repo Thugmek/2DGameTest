@@ -45,7 +45,7 @@ public class Sprite {
     }
 
     public void render(){
-        texture.bind();
+        //texture.bind();
         model.render();
     }
 }

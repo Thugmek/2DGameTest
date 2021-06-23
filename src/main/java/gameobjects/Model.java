@@ -64,7 +64,7 @@ public class Model {
     public void render(){
 
         //set shader
-        shader.bind();
+        //shader.bind();
         shader.setObjectPos(pos);
         //render
         glEnable(GL_VERTEX_ARRAY);
@@ -88,7 +88,7 @@ public class Model {
         glDisable(GL_VERTEX_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
-        shader.unbind();
+        //shader.unbind();
     }
 
     public Vector2f getPos() {

@@ -34,7 +34,7 @@ public class Window {
         aspectRatio = width/(float)height;
 
         //long win = glfwCreateWindow(mode.width(),mode.height(),"LWJGL project",glfwGetPrimaryMonitor(),0);
-        id = glfwCreateWindow(width,height,"LWJGL project",glfwGetPrimaryMonitor(),0);
+        id = glfwCreateWindow(width,height,"LWJGL project",0,0);
 
         glfwShowWindow(id);
         glfwMakeContextCurrent(id);
@@ -62,7 +62,15 @@ public class Window {
         glfwSwapBuffers(id);
 
         //FPS limit
-        while(time > TimeUtils.getTime());
+        while(time > TimeUtils.getTime()){
+            try {
+                long i = (time-TimeUtils.getTime())/1000;
+                if(i > 1)
+                Thread.sleep(i);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void clean(){

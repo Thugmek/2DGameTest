@@ -80,4 +80,8 @@ public class Camera {
     public Vector2f getPos() {
         return pos;
     }
+
+    public float getScale() {
+        return scale;
+    }
 }

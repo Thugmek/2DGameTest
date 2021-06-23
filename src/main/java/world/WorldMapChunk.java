@@ -24,8 +24,6 @@ public class WorldMapChunk {
                 tiles[i][j] = WorldGenAlg.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j);
             }
         }
-
-        generateModel();
     }
 
     public WorldMapTile getTile(int x, int y) {
@@ -124,6 +122,7 @@ public class WorldMapChunk {
     }
 
     public void render(){
+        if(model == null) generateModel();
         model.render();
     }
 }

@@ -15,10 +15,12 @@ import window.Camera;
 import window.Window;
 import world.WorldMap;
 import imgui.app.Configuration;
+import world.WorldMapChunk;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
@@ -29,8 +31,14 @@ public class Game {
     public static Random ran = new Random();
     private static Window window;
     public static Camera cam;
+    public static ThreadPoolExecutor executor;
 
     public static void main(String[] args) {
+
+        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
+
+        Thread.currentThread().setPriority(10);
+
         Window w = new Window();
         window = w;
         KeyboardInput.setWindow(w.getId());
@@ -41,11 +49,11 @@ public class Game {
         glDisable(GL_DEPTH_TEST);
 
         WorldMap map = new WorldMap();
-        for(int i = -5;i<=5;i++){
+        /*for(int i = -5;i<=5;i++){
             for(int j = -5;j<=5;j++){
                 map.generate(i,j);
             }
-        }
+        }*/
 
         Gui.init(new Configuration(),w.getId());
 
@@ -65,7 +73,7 @@ public class Game {
 
         List<Entity> cats = new LinkedList<>();
 
-        for(int i = 0;i<100;i++){
+        for(int i = 0;i<1000;i++){
             cats.add(new Entity(new Sprite(ResourceManager.getTexture("cat")),map));
         }
 
@@ -73,8 +81,6 @@ public class Game {
 
         Camera c = new Camera();
         cam = c;
-
-        Cursor cur = new Cursor();
 
         while(!w.shouldClose()){
             System.out.println(1/w.getDelta());
@@ -96,8 +102,17 @@ public class Game {
             c.forShader(ResourceManager.getShader("shader"));
             c.forShader(ResourceManager.getShader("lineShader"));
             glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D,t.getId());
-            map.render(1,1,2);
+            ResourceManager.getShader("shader").bind();
 
+            float mapX = c.getPos().x;
+            float mapY = c.getPos().y;
+            mapX /= WorldMapChunk.CHUNK_SIZE;
+            mapY /= WorldMapChunk.CHUNK_SIZE;
+            mapX += 0.5f;
+            mapY += 0.5f;
+            map.render(-(int)mapX,-(int)mapY,(int)(1/(c.getScale()*64)));
+
+            ResourceManager.getTexture("cat").bind();
             for(Entity e : cats){
                 e.render();
             }
@@ -110,12 +125,14 @@ public class Game {
             GarbageCollectionUtils.update();
         }
 
+        executor.shutdown();
+
     }
 
     public static void setNewRandomPoint(Entity e, WorldMap map){
         while(true){
 
-            int range = 5;
+            int range = 100;
 
             int x = ran.nextInt(2*range+1)-range;
             int y = ran.nextInt(2*range+1)-range;
@@ -135,7 +152,7 @@ public class Game {
                 0,1,1,1,1,1,1,1,1,1,
                 1,1,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,1,
-                1,1,1,0,1,1,1,1,0,1,
+                1,1,1,0,1,1,1,1,1,1,
                 0,0,0,0,1,0,0,0,0,1,
                 1,1,1,1,1,0,1,1,1,1,
         };

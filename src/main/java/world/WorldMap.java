@@ -60,7 +60,17 @@ public class WorldMap {
     public void render(int x, int y, int zoom) {
         for(int i = x-zoom;i<=x+zoom;i++){
             for(int j = y-zoom;j<=y+zoom;j++){
-                map.get(i).get(j).render();
+                Dictionary<Integer,WorldMapChunk> row = map.get(i);
+                if(row == null){
+                    row = new Hashtable<>();
+                    map.put(i,row);
+                }
+                WorldMapChunk chunk = row.get(j);
+                if(chunk == null){
+                    chunk = new WorldMapChunk(i,j);
+                    row.put(j,chunk);
+                }
+                chunk.render();
             }
         }
     }
