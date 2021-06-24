@@ -1,62 +1,56 @@
 package resources;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBImage;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL14.GL_MIRRORED_REPEAT;
 
 public class Texture {
-    BufferedImage bi;
-    private int id;
+    private float[] uvs;
     private int width;
     private int height;
+    private float depth;
 
-    public Texture(String texture){
-        try {
-            int x[] = new int[1];
-            int y[] = new int[1];
-            int ch[] = new int[1];
-
-            System.out.println("generating pixels");
-
-            ByteBuffer pixels = STBImage.stbi_load("src\\main\\resources\\"+texture,x,y,ch,4);
-            if(pixels == null) System.out.println("Pixels are null!!!");
-
-            width = x[0];
-            height = y[0];
-
-            id = glGenTextures();
-            glBindTexture(GL_TEXTURE_2D,id);
-            glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-            glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixels);
-            glBindTexture(GL_TEXTURE_2D,0);
-
-            System.out.println(String.format("Texture loaded. Image size: %d:%dpx",width,height));
-
-        }catch(Exception e){
-
-        }
+    public Texture(int width, int height, int index, int n) {
+        this.width = width;
+        this.height = height;
+        this.depth = (float)index/n;
     }
 
-    public void bind(){
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D,id);
+    public void generate(int x, int y){
+        //TODO - generate uvs
+
+        float xf = (float)width/x;
+        float yf = (float)height/y;
+
+        uvs = new float[]{
+                0,yf,depth,
+                xf,yf,depth,
+                0,0,depth,
+
+                xf,0,depth,
+                xf,yf,depth,
+                0,0,depth,
+        };
     }
 
-    public int getId(){
-        return id;
+    public float[] getUVs(){
+        return uvs;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public float getIndex() {
+        return depth;
     }
 }

@@ -11,7 +11,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class RightClickMenu {
 
-    private static ImBoolean active = new ImBoolean(true);
+    private static ImBoolean active = new ImBoolean(false);
     private static int x = 0;
     private static int y = 0;
 

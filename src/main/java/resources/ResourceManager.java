@@ -10,6 +10,7 @@ public class ResourceManager {
 
     private static Dictionary<String,Shader> shaders = new Hashtable<>();
     private static Dictionary<String,Texture> textures = new Hashtable<>();
+    private static TextureGroup textureGroup;
 
     public static Shader getShader(String name){
         return shaders.get(name);
@@ -42,12 +43,20 @@ public class ResourceManager {
         }
     }
 
-    public static void loadTexture(String name, String file){
-        textures.put(name, new Texture(file));
-    }
+    /*public static void loadTexture(String name, String file){
+        //textures.put(name, new TextureGroup(file));
+        textures.put("tex", new TextureGroup(new String[0]));
+    }*/
 
     public static Texture getTexture(String name){
+        //return textures.get(name);
         return textures.get(name);
+    }
+
+    public static void loadTextures(String[] files, String[] names){
+        //textures.put(name, new TextureGroup(file));
+        textureGroup = new TextureGroup(files,names);
+        textures = textureGroup.getTextureDictionary();
     }
 
     private static String loadString(String filePath)

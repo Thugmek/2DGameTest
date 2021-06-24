@@ -46,10 +46,7 @@ public class DevStatsWindow {
         ImGui.labelText("Min",""+min);
         ImGui.labelText("Max",""+max);
         ImGui.labelText("Avg",""+avg);
-        ImGui.labelText("Queue length",""+(Game.executor.getTaskCount()-Game.executor.getCompletedTaskCount()));
-        ImGui.labelText("Want capture mouse", ImGui.getIO().getWantCaptureMouse()?"true":"false");
         ImGui.labelText("Camera pos",String.format("[%f,%f]",Game.cam.getPos().x,Game.cam.getPos().y));
-        ImGui.labelText("Click pos",String.format("[%f,%f]",mousePos.x,mousePos.y));
         ImGui.end();
     }
 }

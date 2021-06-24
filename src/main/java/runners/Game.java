@@ -8,8 +8,10 @@ import input.CursorInput;
 import input.KeyboardInput;
 import input.MouseInput;
 import org.joml.Vector2i;
+import org.lwjgl.system.CallbackI;
 import resources.ResourceManager;
 import resources.Texture;
+import resources.TextureGroup;
 import util.GarbageCollectionUtils;
 import window.Camera;
 import window.Window;
@@ -23,6 +25,8 @@ import java.util.Random;
 import java.util.concurrent.*;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.GL_MAX_3D_TEXTURE_SIZE;
+import static org.lwjgl.opengl.GL12.GL_TEXTURE_3D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
@@ -35,7 +39,7 @@ public class Game {
 
     public static void main(String[] args) {
 
-        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
+        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
 
         Thread.currentThread().setPriority(10);
 
@@ -46,35 +50,42 @@ public class Game {
         ResourceManager.loadShader("shader","shaders/shader.vs","shaders/shader.fs");
         ResourceManager.loadShader("lineShader","shaders/lineShader.vs","shaders/lineShader.fs");
 
+        String[] files = new String[]{
+                "sprites\\textures\\Suelo tierra.jpg",
+                "sprites\\textures\\Suelo arena.jpg",
+                "sprites\\cursor.png",
+                "sprites\\cat.png"
+        };
+
+        String[] names = new String[]{
+                "dirt",
+                "grass",
+                "cursor",
+                "cat"
+        };
+
+        ResourceManager.loadTextures(files,names);
+
         glDisable(GL_DEPTH_TEST);
 
+        System.out.println("Max texture size: " + GL_MAX_TEXTURE_SIZE);
+        System.out.println("Max 3D texture size: " + GL_MAX_3D_TEXTURE_SIZE);
+
         WorldMap map = new WorldMap();
-        /*for(int i = -5;i<=5;i++){
-            for(int j = -5;j<=5;j++){
-                map.generate(i,j);
-            }
-        }*/
 
         Gui.init(new Configuration(),w.getId());
 
         setMap(map);
 
         map.getChunk(0,0).generateModel();
-
-
-        Texture t = new Texture("sprites\\textures\\Suelo tierra.jpg");
-        Texture t2 = new Texture("sprites\\cursor.png");
-
-        ResourceManager.loadTexture("dirt","sprites\\textures\\Suelo tierra.jpg");
-        ResourceManager.loadTexture("cursor","sprites\\cursor.png");
-        ResourceManager.loadTexture("cat","sprites\\cat.png");
-
         CursorInput.init();
 
         List<Entity> cats = new LinkedList<>();
 
-        for(int i = 0;i<1000;i++){
-            cats.add(new Entity(new Sprite(ResourceManager.getTexture("cat")),map));
+        for(int i = 0;i<10000;i++){
+            Entity cat = new Entity(new Sprite(ResourceManager.getTexture("cat")),map);
+            cat.getPos().add(ran.nextInt(200)-100,ran.nextInt(200)-100);
+            cats.add(cat);
         }
 
         ResourceManager.getShader("shader").setUniform1i("ourTexture",0 );
@@ -83,8 +94,6 @@ public class Game {
         cam = c;
 
         while(!w.shouldClose()){
-            System.out.println(1/w.getDelta());
-
             DevStatsWindow.fps.add(1/w.getDelta());
 
             CursorInput.update();
@@ -101,7 +110,7 @@ public class Game {
             w.renderStart();
             c.forShader(ResourceManager.getShader("shader"));
             c.forShader(ResourceManager.getShader("lineShader"));
-            glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D,t.getId());
+            //glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_3D,t.getId());
             ResourceManager.getShader("shader").bind();
 
             float mapX = c.getPos().x;
@@ -110,9 +119,11 @@ public class Game {
             mapY /= WorldMapChunk.CHUNK_SIZE;
             mapX += 0.5f;
             mapY += 0.5f;
-            map.render(-(int)mapX,-(int)mapY,(int)(1/(c.getScale()*64)));
+            mapX = Math.round(mapX);
+            mapY = Math.round(mapY);
+            map.render(-(int)mapX,-(int)mapY,(int)(1/(c.getScale()*32))+1);
 
-            ResourceManager.getTexture("cat").bind();
+            //ResourceManager.getTexture("cat").bind();
             for(Entity e : cats){
                 e.render();
             }
@@ -132,7 +143,7 @@ public class Game {
     public static void setNewRandomPoint(Entity e, WorldMap map){
         while(true){
 
-            int range = 100;
+            int range = 10;
 
             int x = ran.nextInt(2*range+1)-range;
             int y = ran.nextInt(2*range+1)-range;

@@ -2,7 +2,7 @@
 
 layout (location=0) in vec3 position;
 layout (location=1) in vec3 col;
-layout (location=2) in vec2 uvs_in;
+layout (location=2) in vec3 uvs_in;
 
 uniform vec2 cameraPos;
 uniform vec2 objectPos;
@@ -11,7 +11,7 @@ uniform float aspectRatio;
 
 out vec4 gl_Position;
 out vec3 color;
-out vec2 uvs;
+out vec3 uvs;
 
 void main()
 {

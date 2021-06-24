@@ -63,6 +63,7 @@ public class AStarAlg {
             }
 
             row.put(bestHead.pos.y,bestHead);
+            Thread.currentThread().interrupt();
         }
 
         result = new LinkedList<>();
@@ -93,6 +94,7 @@ public class AStarAlg {
             result.add(0,map.get(minX).get(minY));
             resultVecs.add(0,result.get(0).pos);
         }
+        Thread.currentThread().interrupt();
     }
 
     private AlgTile findBestHead() {

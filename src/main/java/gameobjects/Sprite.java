@@ -4,31 +4,22 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Texture;
+import resources.TextureGroup;
 
 public class Sprite {
     private Model model;
-    private Texture texture;
+    private TextureGroup texture;
 
     public Sprite(Texture tex){
-        this.texture = tex;
-
         model = new Model(new float[]{
                 0,0,0,
                 1,0,0,
-                0,1,0,
+                1,1,0,
 
                 1,1,0,
-                1,0,0,
+                0,0,0,
                 0,1,0,
-        },new float[]{},new float[]{
-                0,1,
-                1,1,
-                0,0,
-
-                1,0,
-                1,1,
-                0,0,
-        });
+        },new float[]{},tex.getUVs());
 
         model.setShader(ResourceManager.getShader("shader"));
 

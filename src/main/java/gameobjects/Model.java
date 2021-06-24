@@ -1,9 +1,6 @@
-package gameobjects;/*import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;*/
+package gameobjects;
 
-import org.joml.Matrix4f;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import resources.Shader;
 
@@ -20,8 +17,6 @@ public class Model {
     protected Shader shader;
 
     protected Vector2f pos;
-
-    protected Model(){};
 
     public Model(float[] verts,float[] cols,float[] uvs){
         pos = new Vector2f(0,0);
@@ -54,7 +49,6 @@ public class Model {
 
         glBindBuffer(GL_ARRAY_BUFFER,0);
 
-        //System.out.println("New model with " + tris + " verts. Buffer id: " + vb_id);
     }
 
     public void setShader(Shader shader){
@@ -64,7 +58,6 @@ public class Model {
     public void render(){
 
         //set shader
-        //shader.bind();
         shader.setObjectPos(pos);
         //render
         glEnable(GL_VERTEX_ARRAY);
@@ -79,7 +72,7 @@ public class Model {
         glVertexAttribPointer(1,3,GL_FLOAT,false,0,0);
 
         glBindBuffer(GL_ARRAY_BUFFER,uvs_id);
-        glVertexAttribPointer(2,2,GL_FLOAT,false,0,0);
+        glVertexAttribPointer(2,3,GL_FLOAT,false,0,0);
 
         glDrawArrays(GL_TRIANGLES,0,tris);
 
@@ -88,7 +81,6 @@ public class Model {
         glDisable(GL_VERTEX_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
-        //shader.unbind();
     }
 
     public Vector2f getPos() {

@@ -34,7 +34,7 @@ public class Window {
         aspectRatio = width/(float)height;
 
         //long win = glfwCreateWindow(mode.width(),mode.height(),"LWJGL project",glfwGetPrimaryMonitor(),0);
-        id = glfwCreateWindow(width,height,"LWJGL project",0,0);
+        id = glfwCreateWindow(width,height,"LWJGL project",glfwGetPrimaryMonitor(),0);
 
         glfwShowWindow(id);
         glfwMakeContextCurrent(id);

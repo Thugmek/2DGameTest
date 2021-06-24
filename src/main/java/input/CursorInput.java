@@ -9,11 +9,13 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Texture;
+import resources.TextureGroup;
 import runners.Game;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL12.GL_TEXTURE_3D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
@@ -23,10 +25,10 @@ public class CursorInput {
 
     private static Vector2i pos = new Vector2i();
     private static Cursor cursor = new Cursor();
-    private static Texture texture;
+    private static TextureGroup texture;
 
     public static void init(){
-        texture = ResourceManager.getTexture("cursor");
+        //texture = ResourceManager.getTexture("cursor");
     }
 
     public static void update(){
@@ -54,7 +56,7 @@ public class CursorInput {
     }
 
     public static void render(){
-        glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D,texture.getId());
+        //glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_3D,texture.getId());
         cursor.render();
     }
 }
