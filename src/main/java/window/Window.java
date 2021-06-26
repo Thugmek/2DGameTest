@@ -3,6 +3,7 @@ package window;
 import input.KeyboardInput;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import runners.Game;
 import util.TimeUtils;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -31,10 +32,17 @@ public class Window {
 
         width = mode.width();
         height = mode.height();
+        long mon = glfwGetPrimaryMonitor();
+
+        if(Game.props.getProperty("game.windowed").equals("true")){
+            mon = 0;
+            width = Integer.parseInt(Game.props.getProperty("game.windowed.width"));
+            height = Integer.parseInt(Game.props.getProperty("game.windowed.height"));
+        }
+
         aspectRatio = width/(float)height;
 
-        //long win = glfwCreateWindow(mode.width(),mode.height(),"LWJGL project",glfwGetPrimaryMonitor(),0);
-        id = glfwCreateWindow(width,height,"LWJGL project",glfwGetPrimaryMonitor(),0);
+        id = glfwCreateWindow(width,height,"LWJGL project",mon,0);
 
         glfwShowWindow(id);
         glfwMakeContextCurrent(id);

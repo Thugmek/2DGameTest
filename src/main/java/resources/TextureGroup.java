@@ -105,14 +105,4 @@ public class TextureGroup {
             }
         }
     }
-
-    private void putMock(int n, ByteBuffer result){
-        for(int i = 0;i<maxHeight;i++){
-            for(int j = 0;j<maxWidth;j++){
-                byte r = (byte)255;
-                byte g = (byte)(255*(n/5f));
-                result.put(new byte[]{r,g,0,(byte)255});
-            }
-        }
-    }
 }

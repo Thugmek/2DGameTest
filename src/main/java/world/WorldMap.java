@@ -1,5 +1,7 @@
 package world;
 
+import gameobjects.GameObject;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -53,8 +55,42 @@ public class WorldMap {
         return chunk.getTile(restX,restY);
     }
 
+    public void addGameObject(GameObject go){
+        int x = (int)(go.getPos().x/WorldMapChunk.CHUNK_SIZE);
+        int y = (int)(go.getPos().y/WorldMapChunk.CHUNK_SIZE);
+        getChunk(x,y).addGameObject(go);
+    }
+
     public WorldMapChunk getChunk(int x, int y){
-        return map.get(x).get(y);
+        Dictionary<Integer,WorldMapChunk> row = map.get(x);
+        if(row == null){
+            row = new Hashtable<>();
+            map.put(x,row);
+        }
+        WorldMapChunk chunk = row.get(y);
+        if(chunk == null){
+            chunk = new WorldMapChunk(x,y);
+            row.put(y,chunk);
+        }
+        return chunk;
+    }
+
+    public void update(int x, int y, int zoom, float delta) {
+        for(int i = x-zoom;i<=x+zoom;i++){
+            for(int j = y-zoom;j<=y+zoom;j++){
+                Dictionary<Integer,WorldMapChunk> row = map.get(i);
+                if(row == null){
+                    row = new Hashtable<>();
+                    map.put(i,row);
+                }
+                WorldMapChunk chunk = row.get(j);
+                if(chunk == null){
+                    chunk = new WorldMapChunk(i,j);
+                    row.put(j,chunk);
+                }
+                chunk.update(delta);
+            }
+        }
     }
 
     public void render(int x, int y, int zoom) {

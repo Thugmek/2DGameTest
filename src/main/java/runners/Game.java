@@ -1,6 +1,7 @@
 package runners;
 
 import gameobjects.*;
+import gameobjects.entities.entityStates.FindingPathState;
 import gui.DevStatsWindow;
 import gui.Gui;
 import gui.PauseMenu;
@@ -8,27 +9,26 @@ import input.CursorInput;
 import input.KeyboardInput;
 import input.MouseInput;
 import org.joml.Vector2i;
-import org.lwjgl.system.CallbackI;
 import resources.ResourceManager;
-import resources.Texture;
-import resources.TextureGroup;
+import resources.Shader;
 import util.GarbageCollectionUtils;
 import window.Camera;
 import window.Window;
+import world.Biome;
 import world.WorldMap;
 import imgui.app.Configuration;
 import world.WorldMapChunk;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.GL_MAX_3D_TEXTURE_SIZE;
-import static org.lwjgl.opengl.GL12.GL_TEXTURE_3D;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 public class Game {
 
@@ -36,10 +36,20 @@ public class Game {
     private static Window window;
     public static Camera cam;
     public static ThreadPoolExecutor executor;
+    public static Shader shader;
+    public static Properties props = new Properties();
 
     public static void main(String[] args) {
 
-        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
+        try (FileInputStream fis = new FileInputStream("src/main/resources/app.config")) {
+            props.load(fis);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(6);
 
         Thread.currentThread().setPriority(10);
 
@@ -48,17 +58,18 @@ public class Game {
         KeyboardInput.setWindow(w.getId());
         MouseInput.init(w.getId());
         ResourceManager.loadShader("shader","shaders/shader.vs","shaders/shader.fs");
-        ResourceManager.loadShader("lineShader","shaders/lineShader.vs","shaders/lineShader.fs");
 
         String[] files = new String[]{
                 "sprites\\textures\\Suelo tierra.jpg",
                 "sprites\\textures\\Suelo arena.jpg",
+                "sprites\\textures\\Suelo hierba.jpg",
                 "sprites\\cursor.png",
-                "sprites\\cat.png"
+                "sprites\\cat.png",
         };
 
         String[] names = new String[]{
                 "dirt",
+                "sand",
                 "grass",
                 "cursor",
                 "cat"
@@ -66,52 +77,34 @@ public class Game {
 
         ResourceManager.loadTextures(files,names);
 
-        glDisable(GL_DEPTH_TEST);
+        Biome.MEADOW.texture = ResourceManager.getTexture("grass");
+        Biome.DESERT.texture = ResourceManager.getTexture("dirt");
 
-        System.out.println("Max texture size: " + GL_MAX_TEXTURE_SIZE);
-        System.out.println("Max 3D texture size: " + GL_MAX_3D_TEXTURE_SIZE);
+        glDisable(GL_DEPTH_TEST);
 
         WorldMap map = new WorldMap();
 
         Gui.init(new Configuration(),w.getId());
 
-        setMap(map);
-
-        map.getChunk(0,0).generateModel();
         CursorInput.init();
 
         List<Entity> cats = new LinkedList<>();
 
-        for(int i = 0;i<10000;i++){
+        for(int i = 0;i<100;i++){
             Entity cat = new Entity(new Sprite(ResourceManager.getTexture("cat")),map);
             cat.getPos().add(ran.nextInt(200)-100,ran.nextInt(200)-100);
-            cats.add(cat);
+            cat.setState(new FindingPathState(cat,new Vector2i(0,0),map));
+            map.addGameObject(cat);
         }
 
         ResourceManager.getShader("shader").setUniform1i("ourTexture",0 );
-
         Camera c = new Camera();
         cam = c;
+        shader = ResourceManager.getShader("shader");
 
+        //GAME LOOP-----------------------------------------------------------------------------------------------------
         while(!w.shouldClose()){
             DevStatsWindow.fps.add(1/w.getDelta());
-
-            CursorInput.update();
-
-            if(!PauseMenu.getPaused()) {
-                c.update(w.getDelta());
-
-                for (Entity e : cats) {
-                    e.update(w.getDelta());
-                    if (!e.isOnWay()) setNewRandomPoint(e, map);
-                }
-            }
-
-            w.renderStart();
-            c.forShader(ResourceManager.getShader("shader"));
-            c.forShader(ResourceManager.getShader("lineShader"));
-            //glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_3D,t.getId());
-            ResourceManager.getShader("shader").bind();
 
             float mapX = c.getPos().x;
             float mapY = c.getPos().y;
@@ -121,15 +114,31 @@ public class Game {
             mapY += 0.5f;
             mapX = Math.round(mapX);
             mapY = Math.round(mapY);
-            map.render(-(int)mapX,-(int)mapY,(int)(1/(c.getScale()*32))+1);
 
-            //ResourceManager.getTexture("cat").bind();
+            //GAME UPDATE-----------------------------------------------------------------------------------------------
+            if(!PauseMenu.getPaused()) {
+                CursorInput.update();
+                c.update(w.getDelta());
+                map.update(-(int)mapX,-(int)mapY,(int)(1/(c.getScale()*WorldMapChunk.CHUNK_SIZE))+1,w.getDelta());
+
+                for (Entity e : cats) {
+                    e.update(w.getDelta());
+                }
+            }
+
+            //GAME RENDER-----------------------------------------------------------------------------------------------
+            w.renderStart();
+            c.forShader(shader);
+            shader.bind();
+            map.render(-(int)mapX,-(int)mapY,(int)(1/(c.getScale()*WorldMapChunk.CHUNK_SIZE))+1);
+
             for(Entity e : cats){
                 e.render();
             }
 
             CursorInput.render();
 
+            //GAME GUI--------------------------------------------------------------------------------------------------
             Gui.run();
 
             w.renderEnd();
@@ -137,6 +146,8 @@ public class Game {
         }
 
         executor.shutdown();
+        window.clean();
+
 
     }
 

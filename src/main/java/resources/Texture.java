@@ -18,7 +18,7 @@ public class Texture {
     public Texture(int width, int height, int index, int n) {
         this.width = width;
         this.height = height;
-        this.depth = (float)index/n;
+        this.depth = (float)index/(n)+0.00001f;
     }
 
     public void generate(int x, int y){
