@@ -1,7 +1,6 @@
 package gameobjects.entities.entityStates;
 
-import gameobjects.Entity;
-import javafx.application.Application;
+import gameobjects.entities.Entity;
 import org.joml.Vector2i;
 import runners.Game;
 import world.AStarAlg;
@@ -14,10 +13,12 @@ import java.util.concurrent.Future;
 public class FindingPathState implements EntityState {
 
     private Entity entity;
+    private WorldMap map;
     private Future<List<Vector2i>> path;
 
     public FindingPathState(Entity entity, Vector2i pos, WorldMap map){
         this.entity = entity;
+        this.map = map;
 
         path = Game.executor.submit(() -> {
             AStarAlg a = null;
@@ -35,7 +36,7 @@ public class FindingPathState implements EntityState {
     public void onUpdate(float delta) {
         if(path.isDone()) {
             try {
-                entity.setState(new PathFollowingState(entity, path.get()));
+                entity.setState(new PathFollowingState(entity, path.get(),map));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

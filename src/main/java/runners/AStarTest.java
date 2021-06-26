@@ -12,17 +12,6 @@ public class AStarTest {
 
         WorldMap map = new WorldMap();
 
-        map.getTile(5,0).wall = true;
-        map.getTile(5,1).wall = true;
-        map.getTile(5,2).wall = true;
-        map.getTile(5,3).wall = true;
-        map.getTile(5,4).wall = true;
-        map.getTile(5,5).wall = true;
-        map.getTile(5,6).wall = true;
-        map.getTile(5,7).wall = true;
-        map.getTile(5,8).wall = true;
-        map.getTile(5,9).wall = true;
-
         for(int i = 0;i<100;i++) {
             int x1 = -1;
             int y1 = rand.nextInt(10);

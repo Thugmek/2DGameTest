@@ -1,6 +1,7 @@
 package world;
 
 import gameobjects.GameObject;
+import org.joml.Vector2f;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -22,7 +23,7 @@ public class WorldMap {
         map.get(x).put(y,new WorldMapChunk(x,y));
     }
 
-    public WorldMapTile getTile(int x, int y){
+    public WorldMapTile getTile(int x, int y, boolean force){
 
         int chunkX = x/WorldMapChunk.CHUNK_SIZE;
         int chunkY = y/WorldMapChunk.CHUNK_SIZE;
@@ -50,15 +51,34 @@ public class WorldMap {
             row.put(chunkY,chunk);
         }
 
-        //System.out.println(String.format("Cords: [%d|%d], chunk: [%d|%d], tile: [%d|%d]",x,y,chunkX,chunkY,restX,restY));
+        WorldMapTile res = chunk.getTile(restX,restY);
 
-        return chunk.getTile(restX,restY);
+        if(force && res == null){
+            chunk.forceGenerate();
+            res = chunk.getTile(restX,restY);
+        }
+
+        return res;
     }
 
     public void addGameObject(GameObject go){
-        int x = (int)(go.getPos().x/WorldMapChunk.CHUNK_SIZE);
-        int y = (int)(go.getPos().y/WorldMapChunk.CHUNK_SIZE);
-        getChunk(x,y).addGameObject(go);
+
+        Vector2f pos = go.getPos();
+
+        int chunkX = (int)pos.x/WorldMapChunk.CHUNK_SIZE;
+        int chunkY = (int)pos.y/WorldMapChunk.CHUNK_SIZE;
+
+        int restX = (int)pos.x%WorldMapChunk.CHUNK_SIZE;
+        int restY = (int)pos.y%WorldMapChunk.CHUNK_SIZE;
+
+        if(restX < 0){
+            chunkX --;
+        }
+        if(restY < 0){
+            chunkY --;
+        }
+
+        getChunk(chunkX,chunkY).addGameObject(go);
     }
 
     public WorldMapChunk getChunk(int x, int y){
@@ -73,6 +93,24 @@ public class WorldMap {
             row.put(y,chunk);
         }
         return chunk;
+    }
+
+    public WorldMapChunk getChunkByPos(int x, int y){
+
+        int chunkX = x/WorldMapChunk.CHUNK_SIZE;
+        int chunkY = y/WorldMapChunk.CHUNK_SIZE;
+
+        int restX = x%WorldMapChunk.CHUNK_SIZE;
+        int restY = y%WorldMapChunk.CHUNK_SIZE;
+
+        if(restX < 0){
+            chunkX --;
+        }
+        if(restY < 0){
+            chunkY --;
+        }
+
+        return getChunk(chunkX,chunkY);
     }
 
     public void update(int x, int y, int zoom, float delta) {

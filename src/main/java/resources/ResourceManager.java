@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 public class ResourceManager {
 
@@ -53,9 +54,9 @@ public class ResourceManager {
         return textures.get(name);
     }
 
-    public static void loadTextures(String[] files, String[] names){
+    public static void loadTextures(List<TextureDefinition> list){
         //textures.put(name, new TextureGroup(file));
-        textureGroup = new TextureGroup(files,names);
+        textureGroup = new TextureGroup(list);
         textures = textureGroup.getTextureDictionary();
     }
 

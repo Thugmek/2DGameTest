@@ -3,7 +3,6 @@ package world;
 import gameobjects.GameObject;
 import gameobjects.Model;
 import org.joml.Vector2f;
-import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Texture;
 import runners.Game;
@@ -25,12 +24,9 @@ public class WorldMapChunk {
     private int y;
 
     private Model model;
-    private Model model2;
-    private Texture texture1;
     private Texture texture2;
 
     public WorldMapChunk(int x, int y){
-        //texture1 = ResourceManager.getTexture("dirt");
         texture2 = ResourceManager.getTexture("sand");
         this.x = x;
         this.y = y;
@@ -58,13 +54,14 @@ public class WorldMapChunk {
     }
 
     public void generateModel(){
-
-        try {
-            tiles = futureTiles.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        if(tiles[0][0] == null) {
+            try {
+                tiles = futureTiles.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
 
         float[] verts = new float[CHUNK_SIZE*CHUNK_SIZE*6*3];
@@ -141,5 +138,9 @@ public class WorldMapChunk {
         int worldX = x*CHUNK_SIZE;
         int worldY = y*CHUNK_SIZE;
         return (pos.x > worldX && pos.y > worldY && pos.x < worldX+CHUNK_SIZE && pos.y < worldY+CHUNK_SIZE);
+    }
+
+    public List<GameObject> getGameObjects(){
+        return gameObjects;
     }
 }

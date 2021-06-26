@@ -1,6 +1,7 @@
 package runners;
 
-import gameobjects.*;
+import gameobjects.entities.Cat;
+import gameobjects.entities.Entity;
 import gameobjects.entities.entityStates.FindingPathState;
 import gui.DevStatsWindow;
 import gui.Gui;
@@ -11,6 +12,7 @@ import input.MouseInput;
 import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Shader;
+import resources.TextureDefinition;
 import util.GarbageCollectionUtils;
 import window.Camera;
 import window.Window;
@@ -22,13 +24,8 @@ import world.WorldMapChunk;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.*;
-
-import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 
@@ -59,41 +56,33 @@ public class Game {
         MouseInput.init(w.getId());
         ResourceManager.loadShader("shader","shaders/shader.vs","shaders/shader.fs");
 
-        String[] files = new String[]{
-                "sprites\\textures\\Suelo tierra.jpg",
-                "sprites\\textures\\Suelo arena.jpg",
-                "sprites\\textures\\Suelo hierba.jpg",
-                "sprites\\cursor.png",
-                "sprites\\cat.png",
-        };
+        List<TextureDefinition> textures = new ArrayList<>();
 
-        String[] names = new String[]{
-                "dirt",
-                "sand",
-                "grass",
-                "cursor",
-                "cat"
-        };
+        textures.add(new TextureDefinition("dirt","sprites\\textures\\Suelo tierra.jpg"));
+        textures.add(new TextureDefinition("sand","sprites\\textures\\Suelo arena.jpg"));
+        textures.add(new TextureDefinition("grass","sprites\\textures\\Suelo hierba.jpg"));
+        textures.add(new TextureDefinition("cursor","sprites\\cursor.png"));
+        textures.add(new TextureDefinition("cat","sprites\\cat.png"));
 
-        ResourceManager.loadTextures(files,names);
+        ResourceManager.loadTextures(textures);
 
         Biome.MEADOW.texture = ResourceManager.getTexture("grass");
         Biome.DESERT.texture = ResourceManager.getTexture("dirt");
 
-        glDisable(GL_DEPTH_TEST);
-
         WorldMap map = new WorldMap();
+        setMap(map);
 
         Gui.init(new Configuration(),w.getId());
 
-        CursorInput.init();
+        CursorInput.init(map);
 
         List<Entity> cats = new LinkedList<>();
 
         for(int i = 0;i<100;i++){
-            Entity cat = new Entity(new Sprite(ResourceManager.getTexture("cat")),map);
-            cat.getPos().add(ran.nextInt(200)-100,ran.nextInt(200)-100);
+            Entity cat = new Cat(map);
+            cat.getPos().add(ran.nextInt(25),ran.nextInt(25));
             cat.setState(new FindingPathState(cat,new Vector2i(0,0),map));
+            cat.setSpeed(ran.nextFloat()+0.5f);
             map.addGameObject(cat);
         }
 
@@ -120,6 +109,7 @@ public class Game {
                 CursorInput.update();
                 c.update(w.getDelta());
                 map.update(-(int)mapX,-(int)mapY,(int)(1/(c.getScale()*WorldMapChunk.CHUNK_SIZE))+1,w.getDelta());
+                //map.update(-(int)mapX,-(int)mapY,0, w.getDelta());
 
                 for (Entity e : cats) {
                     e.update(w.getDelta());
@@ -151,41 +141,30 @@ public class Game {
 
     }
 
-    public static void setNewRandomPoint(Entity e, WorldMap map){
-        while(true){
-
-            int range = 10;
-
-            int x = ran.nextInt(2*range+1)-range;
-            int y = ran.nextInt(2*range+1)-range;
-
-            x+=Math.round(e.getPos().x);
-            y+=Math.round(e.getPos().y);
-
-            if(!map.getTile(x,y).wall){
-                e.goTo(new Vector2i(x,y));
-                return;
-            }
-        }
-    }
-
     public static void setMap(WorldMap map){
         int[] walls = new int[]{
                 0,1,1,1,1,1,1,1,1,1,
                 1,1,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,1,
-                1,1,1,0,1,1,1,1,1,1,
+                1,1,1,0,1,1,1,1,0,1,
                 0,0,0,0,1,0,0,0,0,1,
-                1,1,1,1,1,0,1,1,1,1,
+                1,1,1,1,1,0,1,1,0,1,
+                1,0,0,0,1,0,1,1,0,1,
+                1,1,0,1,1,0,1,1,0,1,
+                1,1,0,1,1,0,1,1,0,1,
+                1,1,0,0,0,0,1,1,0,1,
+                1,1,1,1,1,1,1,1,1,1,
         };
 
         int width = 10;
 
         for(int i = 0;i<walls.length;i++){
             if(walls[i] == 1){
-                map.getTile(i%width,i/width).wall = true;
+                map.getTile(i%width,i/width, true).wall = true;
             }
         }
+
+        map.getChunk(0,0).generateModel();
     }
 
     public static Window getWindow(){

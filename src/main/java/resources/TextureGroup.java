@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
@@ -19,10 +20,10 @@ public class TextureGroup {
 
     private Dictionary<String,Texture> textureDictionary = new Hashtable<>();
 
-    public TextureGroup(String[] texturePaths, String[] textureNames){
+    public TextureGroup(List<TextureDefinition> list){
         try {
 
-            int length = texturePaths.length;
+            int length = list.size();
             ByteBuffer[] buffers = new ByteBuffer[length];
             Texture[] textures = new Texture[length];
 
@@ -33,14 +34,14 @@ public class TextureGroup {
             for(int i = 0;i<length;i++) {
                 System.out.println("generating pixels");
 
-                buffers[i] = STBImage.stbi_load("src\\main\\resources\\" + texturePaths[i], x, y, ch, 4);
+                buffers[i] = STBImage.stbi_load("src\\main\\resources\\" + list.get(i).getPath(), x, y, ch, 4);
                 if (buffers[i] == null) System.out.println("Pixels are null!!!");
 
                 int width = x[0];
                 int height = y[0];
 
                 textures[i] = new Texture(width,height,i,length);
-                textureDictionary.put(textureNames[i],textures[i]);
+                textureDictionary.put(list.get(i).getName(),textures[i]);
 
                 System.out.println(textureDictionary.size());
 

@@ -116,17 +116,11 @@ public class AStarAlg {
 
     private void solveTile(int x, int y, AlgTile prev){
 
-        if(worldMap.getTile(x,y) == null){
-            System.out.println(String.format("x:%d,y:%d -> [%d|%d]",
-                    x,
-                    y,
-                    (int)Math.floor((float)x/WorldMapChunk.CHUNK_SIZE),
-                    (int)Math.floor((float)y/WorldMapChunk.CHUNK_SIZE)
-            ));
+        /*if(worldMap.getTile(x,y) == null){
             worldMap.getChunk((int)Math.floor((float)x/WorldMapChunk.CHUNK_SIZE),(int)Math.floor((float)y/WorldMapChunk.CHUNK_SIZE)).forceGenerate();
-        }
+        }*/
 
-        if(worldMap.getTile(x,y).wall) return;
+        if(worldMap.getTile(x,y,true).wall) return;
 
         AlgTile val = new AlgTile();
         val.pos = new Vector2i(x,y);
