@@ -35,6 +35,7 @@ public class Game {
     public static ThreadPoolExecutor executor;
     public static Shader shader;
     public static Properties props = new Properties();
+    public static WorldMap map;
 
     public static void main(String[] args) {
 
@@ -69,7 +70,7 @@ public class Game {
         Biome.MEADOW.texture = ResourceManager.getTexture("grass");
         Biome.DESERT.texture = ResourceManager.getTexture("dirt");
 
-        WorldMap map = new WorldMap();
+        map = new WorldMap();
         setMap(map);
 
         Gui.init(new Configuration(),w.getId());

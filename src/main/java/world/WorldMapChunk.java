@@ -3,6 +3,7 @@ package world;
 import gameobjects.GameObject;
 import gameobjects.Model;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Texture;
 import runners.Game;
@@ -120,9 +121,17 @@ public class WorldMapChunk {
     }
 
     public void update(float delta){
-        for (GameObject go : gameObjects) {
+        for (int i = 0;i<gameObjects.size();i++) {
+            GameObject go = gameObjects.get(i);
             go.update(delta);
-            if(isInChuk(go.getPos()));
+            Vector2f pos = go.getPos();
+            WorldMapChunk chunk = Game.map.getChunkByPos(pos.x,pos.y);
+
+            if(this != chunk){
+                chunk.addGameObject(go);
+                gameObjects.remove(go);
+                i--;
+            }
         }
     }
 
@@ -142,5 +151,13 @@ public class WorldMapChunk {
 
     public List<GameObject> getGameObjects(){
         return gameObjects;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

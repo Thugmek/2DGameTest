@@ -95,13 +95,13 @@ public class WorldMap {
         return chunk;
     }
 
-    public WorldMapChunk getChunkByPos(int x, int y){
+    public WorldMapChunk getChunkByPos(float x, float y){
 
-        int chunkX = x/WorldMapChunk.CHUNK_SIZE;
-        int chunkY = y/WorldMapChunk.CHUNK_SIZE;
+        int chunkX = (int)x/WorldMapChunk.CHUNK_SIZE;
+        int chunkY = (int)y/WorldMapChunk.CHUNK_SIZE;
 
-        int restX = x%WorldMapChunk.CHUNK_SIZE;
-        int restY = y%WorldMapChunk.CHUNK_SIZE;
+        float restX = x%WorldMapChunk.CHUNK_SIZE;
+        float restY = y%WorldMapChunk.CHUNK_SIZE;
 
         if(restX < 0){
             chunkX --;

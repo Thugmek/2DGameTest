@@ -105,6 +105,7 @@ public class Gui {
         pauseMenu.render();
         devStatsWindow.render();
         RightClickMenu.render();
+        EntityDetailWindow.render();
         //ImGui.popFont();
     }
 
