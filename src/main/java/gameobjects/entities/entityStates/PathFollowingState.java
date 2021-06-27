@@ -42,7 +42,7 @@ public class PathFollowingState implements EntityState {
             }
             entity.getPos().add(move);
         } else {
-            //end of path;
+            entity.setState(new IdleState(entity,map));
         }
     }
 }

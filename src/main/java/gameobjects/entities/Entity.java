@@ -31,6 +31,10 @@ public class Entity implements GameObject {
         this.state = state;
     }
 
+    public EntityState getState() {
+        return state;
+    }
+
     public void update(float delta){
         state.onUpdate(delta);
     }

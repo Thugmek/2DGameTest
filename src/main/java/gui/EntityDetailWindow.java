@@ -15,6 +15,7 @@ public class EntityDetailWindow {
         if(go != null) {
             ImGui.begin("Entity detail");
             ImGui.labelText("Entity class", go.getClass().getName());
+            ImGui.labelText("Entity state", ((Entity)go).getState().toString());
             if(ImGui.button("Go!")){
                 ((Entity)go).setState(new FindingPathState((Entity)go,new Vector2i(-5,-5), Game.map));
             }

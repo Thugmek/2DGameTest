@@ -1,19 +1,15 @@
 package resources;
 
-import org.lwjgl.stb.STBImage;
-
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-
 public class Texture {
     private float[] uvs;
     private int width;
     private int height;
     private float depth;
+    private int maxWidth;
+    private int maxHeight;
+
+    private int subtextures = 1;
+    private int subtexturesInRow = 6;
 
     public Texture(int width, int height, int index, int n) {
         this.width = width;
@@ -22,7 +18,9 @@ public class Texture {
     }
 
     public void generate(int x, int y){
-        //TODO - generate uvs
+
+        maxHeight = y;
+        maxWidth = x;
 
         float xf = (float)width/x;
         float yf = (float)height/y;
@@ -40,6 +38,31 @@ public class Texture {
 
     public float[] getUVs(){
         return uvs;
+    }
+
+    public void setSubtexturesParameters(int n, int inRow){
+        subtextures = n;
+        subtexturesInRow = inRow;
+    }
+
+    public float[] getUVs(int i){
+
+        int row = i/subtexturesInRow;
+        int cell = i%subtexturesInRow;
+
+        float a = (float)width/(maxWidth*subtexturesInRow);
+
+        float[] res = new float[]{
+                (cell)*a,(row+1)*a,depth,
+                (cell+1)*a,(row+1)*a,depth,
+                (cell)*a,(row)*a,depth,
+
+                (cell+1)*a,(row)*a,depth,
+                (cell+1)*a,(row+1)*a,depth,
+                (cell)*a,(row)*a,depth,
+        };
+
+        return res;
     }
 
     public int getWidth() {

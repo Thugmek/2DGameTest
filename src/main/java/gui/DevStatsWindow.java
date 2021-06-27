@@ -47,6 +47,7 @@ public class DevStatsWindow {
         ImGui.labelText("Max",""+max);
         ImGui.labelText("Avg",""+avg);
         ImGui.labelText("Camera pos",String.format("[%f,%f]",Game.cam.getPos().x,Game.cam.getPos().y));
+        ImGui.labelText("Camera zoom",String.format("%f",Game.cam.getScale()));
         ImGui.end();
     }
 }

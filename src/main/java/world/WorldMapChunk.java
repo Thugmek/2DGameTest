@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Texture;
+import resources.WallMapper;
 import runners.Game;
 
 import java.util.ArrayList;
@@ -28,12 +29,14 @@ public class WorldMapChunk {
     private Texture texture2;
 
     public WorldMapChunk(int x, int y){
-        texture2 = ResourceManager.getTexture("sand");
+        texture2 = ResourceManager.getTexture("walls");
         this.x = x;
         this.y = y;
-        futureTiles = Game.executor.submit(() -> {
-            return generate();
-        });
+        if(futureTiles == null && !Game.executor.isShutdown()){
+            futureTiles = Game.executor.submit(() -> {
+                return generate();
+            });
+        }
     }
 
     private WorldMapTile[][] generate(){
@@ -103,7 +106,7 @@ public class WorldMapChunk {
                         uvs[index + u] = f[u];
                     }
                 }else{
-                    float f[] = texture2.getUVs();
+                    float f[] = getWallsUVs(i,j);
                     for(int u = 0;u<18;u++){
                         uvs[index + u] = f[u];
                     }
@@ -147,6 +150,31 @@ public class WorldMapChunk {
         int worldX = x*CHUNK_SIZE;
         int worldY = y*CHUNK_SIZE;
         return (pos.x > worldX && pos.y > worldY && pos.x < worldX+CHUNK_SIZE && pos.y < worldY+CHUNK_SIZE);
+    }
+
+    public float[] getWallsUVs(int i, int j){
+
+        int index = 0;
+
+        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j+1,true).wall?1:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j+1,true).wall?2:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j+1,true).wall?4:0;
+
+        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j,true).wall?8:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j,true).wall?16:0;
+
+        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j-1,true).wall?32:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j-1,true).wall?64:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j-1,true).wall?128:0;
+
+        try{
+            if(WallMapper.mapper[index] == -1) return texture2.getUVs(35);
+            return texture2.getUVs(WallMapper.mapper[index]);
+        }catch (Exception e){
+            return texture2.getUVs(35);
+        }
+
+        //return texture2.getUVs(25);
     }
 
     public List<GameObject> getGameObjects(){
