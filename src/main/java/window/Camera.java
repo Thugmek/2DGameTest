@@ -35,9 +35,11 @@ public class Camera {
         }
 
         if(KeyboardInput.getKey(GLFW.GLFW_KEY_Q)==1){
+            if(scale < 0.5)
             scale *= 1.01;
         }
         if(KeyboardInput.getKey(GLFW.GLFW_KEY_E)==1){
+            if(scale > 0.005)
             scale *= 0.99;
         }
 

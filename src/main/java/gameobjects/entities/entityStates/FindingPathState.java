@@ -6,6 +6,7 @@ import runners.Game;
 import world.AStarAlg;
 import world.WorldMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -19,16 +20,16 @@ public class FindingPathState implements EntityState {
     public FindingPathState(Entity entity, Vector2i pos, WorldMap map){
         this.entity = entity;
         this.map = map;
-
         path = Game.executor.submit(() -> {
             AStarAlg a = null;
             try {
                 a = new AStarAlg(new Vector2i(Math.round(entity.getPos().x), Math.round(entity.getPos().y)), pos, map);
-            }catch (Exception e){
+                return a.getResult();
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(1);
             }
-            return a.getResult();
+            return new ArrayList<>();
         });
     }
 

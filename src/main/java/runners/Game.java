@@ -3,6 +3,7 @@ package runners;
 import gameobjects.entities.Cat;
 import gameobjects.entities.Entity;
 import gameobjects.entities.entityStates.FindingPathState;
+import gameobjects.entities.entityStates.IdleState;
 import gui.DevStatsWindow;
 import gui.Gui;
 import gui.PauseMenu;
@@ -64,6 +65,8 @@ public class Game {
         textures.add(new TextureDefinition("grass","sprites\\textures\\Suelo hierba.jpg"));
         textures.add(new TextureDefinition("cursor","sprites\\cursor.png"));
         textures.add(new TextureDefinition("cat","sprites\\cat.png"));
+        textures.add(new TextureDefinition("walls","sprites\\textures\\walls.png"));
+        //textures.add(new TextureDefinition("walls","sprites\\textures\\Suelo arena.jpg"));
 
         ResourceManager.loadTextures(textures);
 
@@ -79,15 +82,15 @@ public class Game {
 
         List<Entity> cats = new LinkedList<>();
 
-        for(int i = 0;i<100;i++){
+        for(int i = 0;i<1000;i++){
             Entity cat = new Cat(map);
-            cat.getPos().add(ran.nextInt(25),ran.nextInt(25));
-            cat.setState(new FindingPathState(cat,new Vector2i(0,0),map));
-            cat.setSpeed(ran.nextFloat()+0.5f);
+            cat.getPos().add(ran.nextInt(100),ran.nextInt(100));
+            cat.setState(new IdleState(cat,map));
+            cat.setSpeed(ran.nextFloat()*3+1.5f);
             map.addGameObject(cat);
         }
 
-        ResourceManager.getShader("shader").setUniform1i("ourTexture",0 );
+        ResourceManager.getShader("shader").setUniform1i("sampler",0 );
         Camera c = new Camera();
         cam = c;
         shader = ResourceManager.getShader("shader");
@@ -138,7 +141,7 @@ public class Game {
 
         executor.shutdown();
         window.clean();
-
+        System.exit(0);
 
     }
 

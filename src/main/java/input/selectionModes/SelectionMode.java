@@ -3,12 +3,7 @@ package input.selectionModes;
 import gameobjects.Cursor;
 import gameobjects.GameObject;
 import gameobjects.entities.Entity;
-import gui.DevStatsWindow;
-import gui.EntityDetailWindow;
-import gui.RightClickMenu;
-import input.MouseInput;
 import org.joml.Vector2f;
-import org.joml.Vector2i;
 import runners.Game;
 
 import java.util.List;
