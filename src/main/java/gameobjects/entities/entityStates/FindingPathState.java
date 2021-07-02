@@ -27,7 +27,7 @@ public class FindingPathState implements EntityState {
                 return a.getResult();
             } catch (Exception e) {
                 e.printStackTrace();
-                System.exit(1);
+                //System.exit(1);
             }
             return new ArrayList<>();
         });
@@ -35,14 +35,16 @@ public class FindingPathState implements EntityState {
 
     @Override
     public void onUpdate(float delta) {
-        if(path.isDone()) {
+        //if(path.isDone()) {
             try {
+                path.get();
+                if(path.isDone())
                 entity.setState(new PathFollowingState(entity, path.get(),map));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-        }
+        //}
     }
 }

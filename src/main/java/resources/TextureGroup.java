@@ -74,7 +74,7 @@ public class TextureGroup {
             System.out.println(String.format("Textures loaded."));
 
         }catch(Exception e){
-
+            e.printStackTrace();
         }
     }
 

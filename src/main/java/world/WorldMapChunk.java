@@ -171,6 +171,7 @@ public class WorldMapChunk {
             if(WallMapper.mapper[index] == -1) return texture2.getUVs(35);
             return texture2.getUVs(WallMapper.mapper[index]);
         }catch (Exception e){
+            e.printStackTrace();
             return texture2.getUVs(35);
         }
 

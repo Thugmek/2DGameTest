@@ -9,7 +9,7 @@ public class Texture {
     private int maxHeight;
 
     private int subtextures = 1;
-    private int subtexturesInRow = 6;
+    private int subtexturesInRow = 9;
 
     public Texture(int width, int height, int index, int n) {
         this.width = width;
@@ -41,8 +41,8 @@ public class Texture {
     }
 
     public void setSubtexturesParameters(int n, int inRow){
-        subtextures = n;
-        subtexturesInRow = inRow;
+        //subtextures = n;
+        //subtexturesInRow = inRow;
     }
 
     public float[] getUVs(int i){
@@ -51,6 +51,8 @@ public class Texture {
         int cell = i%subtexturesInRow;
 
         float a = (float)width/(maxWidth*subtexturesInRow);
+
+        //System.out.println(String.format("subtexturesInRow: %d, width: %d, height: %d, maxWidth: %d, maxHeight: %d, a: %f",subtexturesInRow,width,height,maxWidth,maxHeight, a));
 
         float[] res = new float[]{
                 (cell)*a,(row+1)*a,depth,

@@ -15,6 +15,7 @@ import resources.ResourceManager;
 import resources.Shader;
 import resources.TextureDefinition;
 import util.GarbageCollectionUtils;
+import util.TestWallsBuilder;
 import window.Camera;
 import window.Window;
 import world.Biome;
@@ -74,7 +75,9 @@ public class Game {
         Biome.DESERT.texture = ResourceManager.getTexture("dirt");
 
         map = new WorldMap();
-        setMap(map);
+        //setMap(map);
+
+        TestWallsBuilder.build(map);
 
         Gui.init(new Configuration(),w.getId());
 
@@ -82,13 +85,13 @@ public class Game {
 
         List<Entity> cats = new LinkedList<>();
 
-        for(int i = 0;i<1000;i++){
+        /*for(int i = 0;i<1000;i++){
             Entity cat = new Cat(map);
             cat.getPos().add(ran.nextInt(100),ran.nextInt(100));
             cat.setState(new IdleState(cat,map));
             cat.setSpeed(ran.nextFloat()*3+1.5f);
             map.addGameObject(cat);
-        }
+        }*/
 
         ResourceManager.getShader("shader").setUniform1i("sampler",0 );
         Camera c = new Camera();
