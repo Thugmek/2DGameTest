@@ -73,11 +73,11 @@ public class Game {
 
         //GAME LOOP-----------------------------------------------------------------------------------------------------
         while(!w.shouldClose()){
-            DevStatsWindow.fps.add(1/w.getDelta());
             gameState.update();
         }
 
         executor.shutdown();
+        Gui.dispose();
         window.clean();
         System.exit(0);
 

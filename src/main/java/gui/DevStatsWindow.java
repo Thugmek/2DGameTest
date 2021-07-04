@@ -20,7 +20,7 @@ public class DevStatsWindow {
 
     public static int toDrop = 30;
 
-    public void render(){
+    public static void render(){
         float min = Float.MAX_VALUE;
         float max = Float.MIN_VALUE;
         float avg = 0;

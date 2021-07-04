@@ -10,7 +10,7 @@ import runners.Game;
 
 public class BottomMenu {
 
-    public void render(){
+    public static void render(){
         int width = Game.getWindow().getWidth();
         int height = Game.getWindow().getHeight();
         ImGui.setNextWindowPos(0,height-100);

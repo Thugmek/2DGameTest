@@ -8,6 +8,7 @@ import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
+import window.GameState;
 
 import java.util.Objects;
 
@@ -42,9 +43,6 @@ public class Gui {
      */
     public static void init(final Configuration config,long window) {
         handle = window;
-        bottomMenu = new BottomMenu();
-        pauseMenu = new PauseMenu();
-        devStatsWindow = new DevStatsWindow();
 
         initImGui(config);
         font = ImGui.getIO().getFonts().addFontDefault();
@@ -60,7 +58,6 @@ public class Gui {
         imGuiGl3.dispose();
         imGuiGlfw.dispose();
         disposeImGui();
-        disposeWindow();
     }
 
     /**
@@ -72,26 +69,14 @@ public class Gui {
         ImGui.createContext();
     }
 
-    /**
-     * Method called every frame, before calling {@link #process()} method.
-     */
-    private static void preProcess() {
-    }
-
-    /**
-     * Method called every frame, after calling {@link #process()} method.
-     */
-    private static void postProcess() {
-    }
 
     /**
      * Main application loop.
      */
-    public static void run() {
+    public static void run(GameState state) {
         startFrame();
-        preProcess();
-        process();
-        postProcess();
+        //process();
+        state.gui();
         captureMouse = ImGui.getIO().getWantCaptureMouse();
         endFrame();
     }
@@ -101,9 +86,9 @@ public class Gui {
      */
     private static void process(){
         //ImGui.pushFont(font);
-        bottomMenu.render();
-        pauseMenu.render();
-        devStatsWindow.render();
+        BottomMenu.render();
+        PauseMenu.render();
+        DevStatsWindow.render();
         RightClickMenu.render();
         EntityDetailWindow.render();
         //ImGui.popFont();
@@ -139,30 +124,6 @@ public class Gui {
      */
     protected static void disposeImGui() {
         ImGui.destroyContext();
-    }
-
-    /**
-     * Method to destroy GLFW window.
-     */
-    protected static  void disposeWindow() {
-        Callbacks.glfwFreeCallbacks(handle);
-        GLFW.glfwDestroyWindow(handle);
-        GLFW.glfwTerminate();
-        Objects.requireNonNull(GLFW.glfwSetErrorCallback(null)).free();
-    }
-
-    /**
-     * @return pointer to the native GLFW window
-     */
-    public static final long getHandle() {
-        return handle;
-    }
-
-    /**
-     * @return {@link Color} instance, which represents background color for the window
-     */
-    public static final Color getColorBg() {
-        return colorBg;
     }
 
     public static boolean isCaptureMouse(){

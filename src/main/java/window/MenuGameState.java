@@ -5,4 +5,9 @@ public class MenuGameState extends GameState {
     public void update() {
 
     }
+
+    @Override
+    public void gui() {
+
+    }
 }

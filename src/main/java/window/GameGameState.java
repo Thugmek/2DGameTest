@@ -1,11 +1,7 @@
 package window;
 
 import gameobjects.GameObject;
-import gameobjects.entities.Cat;
-import gameobjects.entities.Entity;
-import gameobjects.entities.entityStates.IdleState;
-import gui.Gui;
-import gui.PauseMenu;
+import gui.*;
 import input.CursorInput;
 import resources.ResourceManager;
 import resources.Shader;
@@ -30,6 +26,7 @@ public class GameGameState extends GameState {
 
     @Override
     public void update(){
+        DevStatsWindow.fps.add(1/w.getDelta());
         float mapX = c.getPos().x;
         float mapY = c.getPos().y;
         mapX /= WorldMapChunk.CHUNK_SIZE;
@@ -53,9 +50,18 @@ public class GameGameState extends GameState {
         CursorInput.render();
 
         //GAME GUI--------------------------------------------------------------------------------------------------
-        Gui.run();
+        Gui.run(this);
 
         w.renderEnd();
         GarbageCollectionUtils.update();
+    }
+
+    @Override
+    public void gui() {
+        BottomMenu.render();
+        PauseMenu.render();
+        DevStatsWindow.render();
+        RightClickMenu.render();
+        EntityDetailWindow.render();
     }
 }

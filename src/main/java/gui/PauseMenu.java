@@ -13,7 +13,7 @@ public class PauseMenu {
     private static ImBoolean active = new ImBoolean(false);
     private static boolean deadkey = false;
 
-    public void render(){
+    public static void render(){
         if(KeyboardInput.getKey(GLFW_KEY_ESCAPE) == 1){
             if(!deadkey) {
                 active.set(!active.get());
