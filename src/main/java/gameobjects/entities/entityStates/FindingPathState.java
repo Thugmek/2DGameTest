@@ -27,7 +27,7 @@ public class FindingPathState implements EntityState {
                 return a.getResult();
             } catch (Exception e) {
                 e.printStackTrace();
-                //System.exit(1);
+                System.exit(1);
             }
             return new ArrayList<>();
         });

@@ -14,10 +14,10 @@ public class Sprite {
         model = new Model(new float[]{
                 0,0,-0.5f,
                 1,0,-0.5f,
-                1,1,-0.5f,
+                0,1,-0.5f,
 
                 1,1,-0.5f,
-                0,0,-0.5f,
+                1,0,-0.5f,
                 0,1,-0.5f,
         },new float[]{},tex.getUVs());
 

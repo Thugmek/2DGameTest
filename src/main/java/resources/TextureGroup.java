@@ -32,21 +32,20 @@ public class TextureGroup {
             int ch[] = new int[1];
 
             for(int i = 0;i<length;i++) {
-                System.out.println("generating pixels");
 
                 buffers[i] = STBImage.stbi_load("src\\main\\resources\\" + list.get(i).getPath(), x, y, ch, 4);
                 if (buffers[i] == null) System.out.println("Pixels are null!!!");
 
-                int width = x[0];
-                int height = y[0];
+                int width = y[0];
+                int height = x[0];
 
                 textures[i] = new Texture(width,height,i,length);
                 textureDictionary.put(list.get(i).getName(),textures[i]);
 
-                System.out.println(textureDictionary.size());
-
                 maxWidth = Math.max(maxWidth,width);
                 maxHeight = Math.max(maxHeight,height);
+
+                System.out.println(String.format("Texture loaded: n:%d, width: %d, height:%d",i,width,height));
             }
 
 
@@ -56,7 +55,6 @@ public class TextureGroup {
 
             for(int i = 0;i<length;i++) {
                 putTexture(buffers[i],textures[i].getHeight(),textures[i].getWidth(),data);
-                //putMock(i,data);
                 textures[i].generate(maxHeight,maxWidth);
             }
 
@@ -94,7 +92,7 @@ public class TextureGroup {
     private void putTexture(ByteBuffer image, int x, int y, ByteBuffer result){
         for(int i = 0;i<maxHeight;i++){
             for(int j = 0;j<maxWidth;j++){
-                if(i<x && j<y){
+                if(i<y && j<x){
                     int index = (j+i*x)*4;
                     result.put(image.get(index));
                     result.put(image.get(index+1));

@@ -26,12 +26,12 @@ public class Texture {
         float yf = (float)height/y;
 
         uvs = new float[]{
-                0,yf,depth,
-                xf,yf,depth,
+                0,xf,depth,
+                yf,xf,depth,
                 0,0,depth,
 
-                xf,0,depth,
-                xf,yf,depth,
+                yf,0,depth,
+                yf,xf,depth,
                 0,0,depth,
         };
     }

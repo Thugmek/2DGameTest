@@ -23,9 +23,15 @@ public class PathFollowingState implements EntityState {
     @Override
     public void onUpdate(float delta) {
 
+        if(path == null) {
+            System.out.println("No path found!");
+            entity.setState(new IdleState(entity,map));
+            return;
+        }
+
         for(int i = 1;i<Math.min(path.size(),3);i++){
             Vector2i p = path.get(i);
-            if(map.getTile(p.x, p.y, false).wall == true){
+            if(map.getTile(p.x, p.y, false).wall != null){
                 entity.setState(new FindingPathState(entity,path.get(path.size()-1),map));
                 return;
             }

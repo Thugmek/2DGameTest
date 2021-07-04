@@ -24,19 +24,19 @@ public class LinePath {
 
     protected Vector2f pos;
 
-    public LinePath(List<Vector2i> list){
+    public LinePath(List<Vector2f> list){
 
         pos = new Vector2f(0,0);
 
-        shader = ResourceManager.getShader("lineShader");
+        shader = ResourceManager.getShader("shader");
 
         verts = list.size();
 
         FloatBuffer buff = BufferUtils.createFloatBuffer(verts*3);
         for(int i = 0;i<verts;i++){
-            buff.put(list.get(i).x+0.5f);
-            buff.put(list.get(i).y+0.5f);
-            buff.put(0);
+            buff.put(list.get(i).x);
+            buff.put(list.get(i).y);
+            buff.put(-1);
         }
 
         buff.flip();
@@ -48,8 +48,8 @@ public class LinePath {
 
     public void render(){
         //set shader
-        shader.bind();
         shader.setObjectPos(pos);
+        shader.setShaderMode(2);
         //render
         glEnable(GL_VERTEX_ARRAY);
         glEnableClientState(GL_VERTEX_ARRAY);
@@ -64,11 +64,9 @@ public class LinePath {
         glDisable(GL_VERTEX_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
-        shader.unbind();
     }
 
     public void finalize(){
-        //System.out.println("finalize: " + vb_id);
         GarbageCollectionUtils.getBuffersList().add(vb_id);
     }
 }

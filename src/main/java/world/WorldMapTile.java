@@ -1,7 +1,9 @@
 package world;
 
+import gameobjects.Wall;
+
 public class WorldMapTile {
-    public boolean wall = false;
+    public Wall wall = null;
     public Biome biome;
     public WorldMapTile(){
 

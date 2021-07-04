@@ -2,10 +2,12 @@ package input.selectionModes;
 
 import gameobjects.Cursor;
 import gameobjects.GameObject;
+import gameobjects.LinePath;
 import gameobjects.entities.Entity;
 import gui.DevStatsWindow;
 import gui.EntityDetailWindow;
 import gui.RightClickMenu;
+import input.CursorInput;
 import org.joml.Vector2f;
 import runners.Game;
 import world.WorldMapChunk;
@@ -14,10 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntitySelectionMode extends SelectionMode{
-    public EntitySelectionMode(List<Cursor> cursors) {
-        super(cursors);
-    }
-
     public void primaryCursorClick(Vector2f mousePos){
         Vector2f v = Game.cam.screenPosToWorld(mousePos);
 
@@ -29,7 +27,7 @@ public class EntitySelectionMode extends SelectionMode{
         if(nearest != null) {
             Cursor cursor = new Cursor();
             cursor.toObject(nearest);
-            cursors.add(cursor);
+            CursorInput.getCursors().add(cursor);
         }
 
         DevStatsWindow.mousePos = v;
@@ -84,7 +82,7 @@ public class EntitySelectionMode extends SelectionMode{
                         selected.add((Entity) go);
                         Cursor cursor = new Cursor();
                         cursor.toObject(go);
-                        cursors.add(cursor);
+                        CursorInput.getCursors().add(cursor);
                     }
 
                 }
@@ -93,5 +91,21 @@ public class EntitySelectionMode extends SelectionMode{
 
     }
     public void secondaryCursorDrag(Vector2f mousePos, Vector2f mousePos2){
+    }
+    public void draw(Vector2f mousePos, Vector2f mousePos2){
+
+        Vector2f pos1 = Game.cam.screenPosToWorld(mousePos);
+        Vector2f pos2 = Game.cam.screenPosToWorld(mousePos2);
+
+        List<Vector2f> points = new ArrayList<>();
+
+        points.add(pos1);
+        points.add(new Vector2f(pos2.x,pos1.y));
+        points.add(pos2);
+        points.add(new Vector2f(pos1.x,pos2.y));
+        points.add(pos1);
+
+        LinePath lp = new LinePath(points);
+        lp.render();
     }
 }

@@ -10,12 +10,6 @@ import java.util.List;
 
 public abstract class SelectionMode {
 
-    protected List<Cursor> cursors;
-
-    public SelectionMode(List<Cursor> cursors){
-        this.cursors = cursors;
-    }
-
     public void primaryCursorClick(Vector2f mousePos){
     }
     public void secondaryCursorClick(Vector2f mousePos){
@@ -23,6 +17,8 @@ public abstract class SelectionMode {
     public void primaryCursorDrag(Vector2f mousePos, Vector2f mousePos2){
     }
     public void secondaryCursorDrag(Vector2f mousePos, Vector2f mousePos2){
+    }
+    public void draw(Vector2f mousePos, Vector2f mousePos2){
     }
 
     protected GameObject getObject(Vector2f v){

@@ -8,6 +8,7 @@ uniform vec2 cameraPos;
 uniform vec2 objectPos;
 uniform float cameraZoom;
 uniform float aspectRatio;
+uniform int shaderMode;
 
 out vec4 gl_Position;
 out vec3 color;
@@ -15,9 +16,15 @@ out vec3 uvs;
 
 void main()
 {
-    //vec4 pos = vec4((position.x+cameraPos.x)*cameraZoom,(position.y+cameraPos.y)*cameraZoom,position.z,1);
-    vec4 pos = vec4((position.x+objectPos.x+cameraPos.x)*cameraZoom,(position.y+objectPos.y+cameraPos.y)*cameraZoom*aspectRatio,position.z,1);
-    gl_Position = pos;
-    color = col;
-    uvs = uvs_in;
+    if(shaderMode == 1){
+        vec4 pos = vec4((position.x+objectPos.x+cameraPos.x)*cameraZoom,(position.y+objectPos.y+cameraPos.y)*cameraZoom*aspectRatio,position.z,1);
+        gl_Position = pos;
+        color = col;
+        uvs = uvs_in;
+    }else if(shaderMode == 2){
+        vec4 pos = vec4((position.x+objectPos.x+cameraPos.x)*cameraZoom,(position.y+objectPos.y+cameraPos.y)*cameraZoom*aspectRatio,position.z,1);
+        gl_Position = pos;
+        color = col;
+        uvs = uvs_in;
+    }
 }

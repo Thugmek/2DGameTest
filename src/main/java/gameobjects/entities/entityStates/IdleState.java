@@ -19,7 +19,7 @@ public class IdleState implements EntityState{
     public void onUpdate(float delta) {
         if(Game.ran.nextFloat()>0.95) {
             Vector2i pos = new Vector2i(Game.ran.nextInt(100), Game.ran.nextInt(100));
-            if(!Game.map.getTile(pos.x, pos.y, true).wall)
+            if(Game.map.getTile(pos.x, pos.y, true).wall == null)
             entity.setState(new FindingPathState(entity, pos, map));
         }
     }

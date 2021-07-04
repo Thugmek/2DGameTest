@@ -2,6 +2,7 @@ package world;
 
 import gameobjects.GameObject;
 import gameobjects.Model;
+import gameobjects.Wall;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import resources.ResourceManager;
@@ -100,13 +101,13 @@ public class WorldMapChunk {
                 verts[index+16] = 1+j;
                 verts[index+17] = 0;
 
-                if(!tiles[i][j].wall){
+                if(tiles[i][j].wall == null){
                     float f[] = tiles[i][j].biome.texture.getUVs();
                     for(int u = 0;u<18;u++){
                         uvs[index + u] = f[u];
                     }
                 }else{
-                    float f[] = getWallsUVs(i,j);
+                    float f[] = getWallsUVs(i,j,tiles[i][j].wall.texture);
                     for(int u = 0;u<18;u++){
                         uvs[index + u] = f[u];
                     }
@@ -139,6 +140,7 @@ public class WorldMapChunk {
     }
 
     public void render(){
+        //System.out.println(String.format("Chunk %d,%d render. Model is: %s",x,y,(model == null)?"null":model.toString()));
         if(model == null && futureTiles != null && futureTiles.isDone()) generateModel();
         if(model != null) model.render();
         for (GameObject go : gameObjects) {
@@ -152,30 +154,28 @@ public class WorldMapChunk {
         return (pos.x > worldX && pos.y > worldY && pos.x < worldX+CHUNK_SIZE && pos.y < worldY+CHUNK_SIZE);
     }
 
-    public float[] getWallsUVs(int i, int j){
+    public float[] getWallsUVs(int i, int j, Texture texture){
 
         int index = 0;
 
-        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j+1,true).wall?1:0;
-        index += Game.map.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j+1,true).wall?2:0;
-        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j+1,true).wall?4:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j+1,true).wall == null?0:1;
+        index += Game.map.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j+1,true).wall == null?0:2;
+        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j+1,true).wall == null?0:4;
 
-        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j,true).wall?8:0;
-        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j,true).wall?16:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j,true).wall == null?0:8;
+        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j,true).wall == null?0:16;
 
-        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j-1,true).wall?32:0;
-        index += Game.map.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j-1,true).wall?64:0;
-        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j-1,true).wall?128:0;
+        index += Game.map.getTile(x*CHUNK_SIZE + i-1, y*CHUNK_SIZE + j-1,true).wall == null?0:32;
+        index += Game.map.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j-1,true).wall == null?0:64;
+        index += Game.map.getTile(x*CHUNK_SIZE + i+1, y*CHUNK_SIZE + j-1,true).wall == null?0:128;
 
         try{
             if(WallMapper.mapper[index] == -1) return texture2.getUVs(35);
-            return texture2.getUVs(WallMapper.mapper[index]);
+            return texture.getUVs(WallMapper.mapper[index]);
         }catch (Exception e){
             e.printStackTrace();
             return texture2.getUVs(35);
         }
-
-        //return texture2.getUVs(25);
     }
 
     public List<GameObject> getGameObjects(){
