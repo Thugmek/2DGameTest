@@ -189,4 +189,24 @@ public class WorldMapChunk {
     public int getY() {
         return y;
     }
+
+    public Future<WorldMapTile[][]> getFutureTiles() {
+        return futureTiles;
+    }
+
+    public void setFutureTiles(Future<WorldMapTile[][]> futureTiles) {
+        this.futureTiles = futureTiles;
+    }
+
+    public WorldMapTile[][] getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(WorldMapTile[][] tiles) {
+        this.tiles = tiles;
+    }
+
+    public void setGameObjects(List<GameObject> gameObjects) {
+        this.gameObjects = gameObjects;
+    }
 }

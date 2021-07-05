@@ -1,5 +1,6 @@
 package world;
 
+import org.joml.Vector2f;
 import util.Randomizers;
 
 public class WorldGenAlg {
@@ -7,10 +8,17 @@ public class WorldGenAlg {
 
     public static WorldMapTile getTile(int x, int y){
         WorldMapTile tile = new WorldMapTile();
-        float value = perlin(x,y,64,(int)seed)/1.5f;
-        value += perlin(x,y,16,(int)seed+1)/3;
-        tile.biome = value>0.5?Biome.DESERT:Biome.MEADOW;
+        float value = multiOctavePerlin(x,y,3,17,(int)seed);
+        tile.biome = value>0.2?Biome.DESERT:Biome.MEADOW;
         return tile;
+    }
+
+    private static float multiOctavePerlin(int x, int y, int octaves, int step, int seed){
+        float res = 0;
+        for(int i = 1;i<=octaves;i++){
+            res += perlin(x,y,step*i,seed+i)*i/octaves;
+        }
+        return res;
     }
 
     private static float perlin(int x, int y, int chunk, int seed){
@@ -22,20 +30,25 @@ public class WorldGenAlg {
         int x2 = x1 + chunk;
         int y2 = y1 + chunk;
 
-        float kx = (float)(x-x1)/chunk;
-        float ky = (float)(y-y1)/chunk;
+        float kx = (float)(x-x1)/(chunk);
+        float ky = (float)(y-y1)/(chunk);
 
-        float a = Randomizers.getByPos(x1,y1,seed);
-        float b = Randomizers.getByPos(x1,y2,seed);
-        float c = Randomizers.getByPos(x2,y1,seed);
-        float d = Randomizers.getByPos(x2,y2,seed);
+        float res = 0;
+        float diag = (float)Math.sqrt(2);
+
+        float a = cornerVector(Math.round(Randomizers.getByPos(x1,y1,seed)*8)/8f).dot(new Vector2f(x-x1,y-y1));
+        float b = cornerVector(Math.round(Randomizers.getByPos(x1,y2,seed)*8)/8f).dot(new Vector2f(x-x1,y-y2));
+        float c = cornerVector(Math.round(Randomizers.getByPos(x2,y1,seed)*8)/8f).dot(new Vector2f(x-x2,y-y1));
+        float d = cornerVector(Math.round(Randomizers.getByPos(x2,y2,seed)*8)/8f).dot(new Vector2f(x-x2,y-y2));
 
         float e = (1-ky)*a + ky*b;
         float f = (1-ky)*c + ky*d;
 
-        //System.out.println(String.format("Perlin [%d,%d] - x1:%d, y1:%d, x2:%d, y2:%d - a:%f, b:%f, c:%f, d:%f, e:%f, f:%f",x,y,x1,y1,x2,y2,a,b,c,d,e,f));
-
         return (1-kx)*e + kx*f;
 
+    }
+
+    private static Vector2f cornerVector(float f){
+        return new Vector2f((float)Math.sin(f*Math.PI*2),(float)Math.cos(f*Math.PI*2));
     }
 }

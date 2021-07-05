@@ -21,7 +21,6 @@
   <defs
      id="defs49">
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient3401"
        osb:paint="gradient">
       <stop
@@ -56,15 +55,15 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.25473545"
      inkscape:cx="-0.60292125"
-     inkscape:cy="742.97177"
+     inkscape:cy="735.12049"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer4"
      inkscape:document-rotation="0"
      showgrid="true"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:window-y="1341"
      inkscape:window-maximized="1"
      units="px">
     <inkscape:grid
@@ -88,7 +87,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -788,10 +787,23 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Yellow"
-     style="display:inline;opacity:0.45">
+     style="display:none;opacity:0.45">
     <rect
        style="fill:#ffcc00;fill-opacity:1;fill-rule:nonzero;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect4350"
+       width="428.625"
+       height="428.625"
+       x="0"
+       y="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="gray"
+     style="opacity:0.45523079">
+    <rect
+       style="fill:#165044;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
+       id="rect989"
        width="428.625"
        height="428.625"
        x="0"

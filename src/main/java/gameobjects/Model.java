@@ -59,7 +59,6 @@ public class Model {
 
         //set shader
         shader.setObjectPos(pos);
-        shader.setShaderMode(1);
         //render
         glEnable(GL_VERTEX_ARRAY);
         glEnableClientState(GL_VERTEX_ARRAY);

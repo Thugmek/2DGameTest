@@ -6,11 +6,8 @@ import imgui.app.Configuration;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
-import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
-import window.GameState;
-
-import java.util.Objects;
+import window.gameStates.GameState;
 
 public class Gui {
 
@@ -18,7 +15,8 @@ public class Gui {
     private static PauseMenu pauseMenu;
     private static DevStatsWindow devStatsWindow;
 
-    private static ImFont font;
+    public static ImFont font;
+    public static ImFont font2;
     private static ImFont fontLarge;
 
     private static boolean captureMouse = false;
@@ -45,8 +43,8 @@ public class Gui {
         handle = window;
 
         initImGui(config);
-        font = ImGui.getIO().getFonts().addFontDefault();
-        //font.setScale(2);
+        font = ImGui.getIO().getFonts().addFontFromFileTTF("src/main/resources/fonts/Semi-Coder-Regular.otf",24);
+        font2 = ImGui.getIO().getFonts().addFontFromFileTTF("src/main/resources/fonts/SimplySquare.ttf",48);
         imGuiGlfw.init(handle, true);
         imGuiGl3.init(glslVersion);
     }
@@ -76,7 +74,9 @@ public class Gui {
     public static void run(GameState state) {
         startFrame();
         //process();
+        //ImGui.pushFont(font);
         state.gui();
+        //ImGui.popFont();
         captureMouse = ImGui.getIO().getWantCaptureMouse();
         endFrame();
     }

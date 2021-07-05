@@ -1,7 +1,6 @@
-package window;
+package window.gameStates;
 
-import gameobjects.GameObject;
-import gameobjects.Wall;
+import gameobjects.Sprite;
 import gameobjects.entities.Cat;
 import gameobjects.entities.Entity;
 import gameobjects.entities.entityStates.IdleState;
@@ -9,13 +8,14 @@ import gui.Gui;
 import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import input.CursorInput;
-import input.selectionModes.EntitySelectionMode;
-import input.selectionModes.WallBuilderSelectionMode;
 import resources.ResourceManager;
 import resources.Shader;
 import resources.TextureDefinition;
+import resources.TextureGroup;
 import runners.Game;
 import util.TestWallsBuilder;
+import window.Camera;
+import window.Window;
 import world.Biome;
 import world.WorldMap;
 import world.WorldMapChunk;
@@ -35,6 +35,18 @@ public class LoadingGameState extends GameState {
     private boolean loaded = false;
     private float progress = 0;
     private String mesage = "";
+    private TextureGroup loadingScreen;
+    private Sprite loadingScreenSprite;
+
+    public LoadingGameState(){
+        List<TextureDefinition> texs = new ArrayList<>();
+        texs.add(new TextureDefinition("image","graphics\\loadingScreen.png"));
+        loadingScreen = new TextureGroup(texs);
+        loadingScreenSprite = new Sprite(loadingScreen.getTextureDictionary().get("image"));
+        shader.setUniform1i("sampler", 0);
+        c.forShader(shader);
+        shader.setShaderMode(3);
+    }
 
     @Override
     public void update() {
@@ -42,6 +54,7 @@ public class LoadingGameState extends GameState {
             progress = 0;
             mesage = "loading textures";
             renderProgress();
+
             List<TextureDefinition> textures = new ArrayList<>();
 
             textures.add(new TextureDefinition("dirt", "sprites\\textures\\Suelo tierra.jpg"));
@@ -54,8 +67,6 @@ public class LoadingGameState extends GameState {
             textures.add(new TextureDefinition("wallShadow", "sprites\\textures\\SingleWall.png"));
 
             ResourceManager.loadTextures(textures);
-
-            ResourceManager.getShader("shader").setUniform1i("sampler", 0);
 
             Biome.MEADOW.texture = ResourceManager.getTexture("grass");
             Biome.DESERT.texture = ResourceManager.getTexture("dirt");
@@ -99,6 +110,7 @@ public class LoadingGameState extends GameState {
 
             Game.gameState = new GameGameState();
             loaded = true;
+            ResourceManager.getTextureGroup().bind();
         }
     }
 
@@ -106,8 +118,8 @@ public class LoadingGameState extends GameState {
     public void gui() {
         int width = Game.getWindow().getWidth();
         int height = Game.getWindow().getHeight();
-        ImGui.setNextWindowPos((width/2)-150,(height/2)-50);
-        ImGui.setNextWindowSize(300,100);
+        ImGui.setNextWindowPos((width/2)-200,(height/2)-60);
+        ImGui.setNextWindowSize(400,120);
         ImGui.begin("Loading", ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoCollapse);
         ImGui.progressBar(progress);
         ImGui.labelText("",mesage);
@@ -117,7 +129,8 @@ public class LoadingGameState extends GameState {
     private void renderProgress(){
 
         w.renderStart();
-
+        loadingScreen.bind();
+        loadingScreenSprite.render();
         Gui.run(this);
 
         w.renderEnd();

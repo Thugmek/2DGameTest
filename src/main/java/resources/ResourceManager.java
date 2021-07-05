@@ -54,6 +54,10 @@ public class ResourceManager {
         return textures.get(name);
     }
 
+    public static TextureGroup getTextureGroup(){
+        return textureGroup;
+    }
+
     public static void loadTextures(List<TextureDefinition> list){
         //textures.put(name, new TextureGroup(file));
         textureGroup = new TextureGroup(list);

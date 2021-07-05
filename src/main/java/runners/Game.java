@@ -1,38 +1,24 @@
 package runners;
 
-import gameobjects.LinePath;
-import gameobjects.Wall;
-import gameobjects.entities.Cat;
-import gameobjects.entities.Entity;
-import gameobjects.entities.entityStates.FindingPathState;
-import gameobjects.entities.entityStates.IdleState;
-import gui.DevStatsWindow;
 import gui.Gui;
-import gui.PauseMenu;
-import input.CursorInput;
+import imgui.app.Configuration;
 import input.KeyboardInput;
 import input.MouseInput;
-import org.joml.Vector2f;
-import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Shader;
-import resources.TextureDefinition;
-import util.GarbageCollectionUtils;
-import util.TestWallsBuilder;
 import window.Camera;
-import window.GameState;
-import window.LoadingGameState;
+import window.gameStates.GameState;
+import window.gameStates.MenuGameState;
 import window.Window;
-import world.Biome;
 import world.WorldMap;
-import imgui.app.Configuration;
-import world.WorldMapChunk;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Properties;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class Game {
 
@@ -69,7 +55,7 @@ public class Game {
         map = new WorldMap();
         Gui.init(new Configuration(),w.getId());
         cam = new Camera();
-        gameState = new LoadingGameState();
+        gameState = new MenuGameState();
 
         //GAME LOOP-----------------------------------------------------------------------------------------------------
         while(!w.shouldClose()){

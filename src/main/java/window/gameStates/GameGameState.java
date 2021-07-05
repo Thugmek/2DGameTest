@@ -1,4 +1,4 @@
-package window;
+package window.gameStates;
 
 import gameobjects.GameObject;
 import gui.*;
@@ -7,6 +7,8 @@ import resources.ResourceManager;
 import resources.Shader;
 import runners.Game;
 import util.GarbageCollectionUtils;
+import window.Camera;
+import window.Window;
 import world.WorldMap;
 import world.WorldMapChunk;
 

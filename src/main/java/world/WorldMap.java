@@ -148,4 +148,8 @@ public class WorldMap {
             }
         }
     }
+
+    public Dictionary<Integer, Dictionary<Integer, WorldMapChunk>> getDictionary() {
+        return map;
+    }
 }

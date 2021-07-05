@@ -5,6 +5,8 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import input.KeyboardInput;
 import runners.Game;
+import window.gameStates.MenuGameState;
+import window.gameStates.SaveGameState;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
@@ -33,6 +35,9 @@ public class PauseMenu {
         ImGui.setNextWindowSize(menuWidth,menuHeight);
 
         ImGui.begin("Paused",active,ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoCollapse);
+        if(ImGui.button("Save and go to menu")){
+            Game.gameState = new SaveGameState();
+        }
         if(ImGui.button("Exit game")){
             glfwSetWindowShouldClose(Game.getWindow().getId(),true);
         }

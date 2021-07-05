@@ -26,5 +26,10 @@ void main()
         gl_Position = pos;
         color = col;
         uvs = uvs_in;
-    }
+    }else if(shaderMode == 3){
+         vec4 pos = vec4((position.x*2)-1,((position.y*2)-1)*aspectRatio,position.z,1);
+         gl_Position = pos;
+         color = col;
+         uvs = uvs_in;
+     }
 }

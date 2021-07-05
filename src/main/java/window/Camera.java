@@ -55,14 +55,12 @@ public class Camera {
         shader.setAspectRatio(Game.getWindow().getAspectRatio());
         shader.setCamePos(pos);
         shader.setCameraZoom(scale);
-        shader.setShaderMode(2);
+        shader.setShaderMode(1);
     }
 
     public Vector2f screenPosToWorld(Vector2f screen){
         int height = Game.getWindow().getHeight();
         int width = Game.getWindow().getWidth();
-
-        //screen = new Vector2f(width/2,height/2);
 
         float ar = Game.getWindow().getAspectRatio();
 
