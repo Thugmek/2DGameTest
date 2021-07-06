@@ -2,7 +2,9 @@ package world;
 
 import resources.Texture;
 
-public enum Biome {
+import java.io.Serializable;
+
+public enum Biome implements Serializable {
     DESERT,
     FORREST,
     MEADOW,

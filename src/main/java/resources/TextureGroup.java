@@ -39,7 +39,7 @@ public class TextureGroup {
                 int width = y[0];
                 int height = x[0];
 
-                textures[i] = new Texture(width,height,i,length);
+                textures[i] = new Texture(width,height,i,length,list.get(i).getName());
                 textureDictionary.put(list.get(i).getName(),textures[i]);
 
                 maxWidth = Math.max(maxWidth,width);

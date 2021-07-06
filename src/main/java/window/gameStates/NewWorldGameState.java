@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class LoadingGameState extends GameState {
+public class NewWorldGameState extends GameState {
 
     private Window w = Game.getWindow();
     private Camera c = Game.cam;
@@ -38,7 +38,7 @@ public class LoadingGameState extends GameState {
     private TextureGroup loadingScreen;
     private Sprite loadingScreenSprite;
 
-    public LoadingGameState(){
+    public NewWorldGameState(){
         List<TextureDefinition> texs = new ArrayList<>();
         texs.add(new TextureDefinition("image","graphics\\loadingScreen.png"));
         loadingScreen = new TextureGroup(texs);
@@ -60,6 +60,7 @@ public class LoadingGameState extends GameState {
             textures.add(new TextureDefinition("dirt", "sprites\\textures\\Suelo tierra.jpg"));
             textures.add(new TextureDefinition("sand", "sprites\\textures\\Suelo arena.jpg"));
             textures.add(new TextureDefinition("grass", "sprites\\textures\\Suelo hierba.jpg"));
+            textures.add(new TextureDefinition("snow", "sprites\\textures\\Suelo nieve.jpg"));
             textures.add(new TextureDefinition("cursor", "sprites\\cursor.png"));
             textures.add(new TextureDefinition("cat", "sprites\\cat.png"));
             textures.add(new TextureDefinition("wallsSandstone", "sprites\\textures\\wallsSandstone.png"));
@@ -69,7 +70,9 @@ public class LoadingGameState extends GameState {
             ResourceManager.loadTextures(textures);
 
             Biome.MEADOW.texture = ResourceManager.getTexture("grass");
-            Biome.DESERT.texture = ResourceManager.getTexture("dirt");
+            Biome.DESERT.texture = ResourceManager.getTexture("sand");
+            Biome.SNOW.texture = ResourceManager.getTexture("dirt");
+            Biome.FORREST.texture = ResourceManager.getTexture("snow");
 
             CursorInput.init();
 
@@ -80,7 +83,7 @@ public class LoadingGameState extends GameState {
             TestWallsBuilder.build(map);
 
             for (int i = 0; i < 1000; i++) {
-                Entity cat = new Cat(map);
+                Entity cat = new Cat();
                 cat.getPos().add(ran.nextInt(100), ran.nextInt(100));
                 cat.setState(new IdleState(cat, map));
                 cat.setSpeed(ran.nextFloat() * 3 + 1.5f);

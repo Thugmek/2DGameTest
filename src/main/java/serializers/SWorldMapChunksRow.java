@@ -1,9 +1,10 @@
 package serializers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SWorldMapChunksRow {
+public class SWorldMapChunksRow implements Serializable {
     private List<SWorldMapChunk> chunks = new ArrayList<>();
 
     private int pos;
@@ -14,5 +15,9 @@ public class SWorldMapChunksRow {
 
     public List<SWorldMapChunk> getChunks() {
         return chunks;
+    }
+
+    public int getPos() {
+        return pos;
     }
 }

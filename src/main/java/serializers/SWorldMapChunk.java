@@ -1,17 +1,18 @@
 package serializers;
 
 import gameobjects.GameObject;
+import serializers.gameobjects.SGameObject;
 import world.WorldMapTile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 
-public class SWorldMapChunk {
+public class SWorldMapChunk implements Serializable {
     private int pos;
 
-    private WorldMapTile[][] tiles;
-    private List<GameObject> gameObjects = new ArrayList<>();
+    private SWorldMapTile[][] tiles;
+    private List<SGameObject> gameObjects = new ArrayList<>();
 
     public SWorldMapChunk(int pos) {
         this.pos = pos;
@@ -25,19 +26,15 @@ public class SWorldMapChunk {
         this.pos = pos;
     }
 
-    public WorldMapTile[][] getTiles() {
+    public SWorldMapTile[][] getTiles() {
         return tiles;
     }
 
-    public void setTiles(WorldMapTile[][] tiles) {
+    public void setTiles(SWorldMapTile[][] tiles) {
         this.tiles = tiles;
     }
 
-    public List<GameObject> getGameObjects() {
+    public List<SGameObject> getGameObjects() {
         return gameObjects;
-    }
-
-    public void setGameObjects(List<GameObject> gameObjects) {
-        this.gameObjects = gameObjects;
     }
 }

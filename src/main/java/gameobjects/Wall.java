@@ -3,7 +3,9 @@ package gameobjects;
 import resources.ResourceManager;
 import resources.Texture;
 
-public enum Wall {
+import java.io.Serializable;
+
+public enum Wall implements Serializable {
 
     GRANITE(300,"wallsGranite"),
     SANDSTONE(100, "wallsSandstone");

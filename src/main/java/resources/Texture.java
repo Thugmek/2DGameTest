@@ -10,11 +10,17 @@ public class Texture {
 
     private int subtextures = 1;
     private int subtexturesInRow = 9;
+    private String name;
 
-    public Texture(int width, int height, int index, int n) {
+    public Texture(int width, int height, int index, int n, String name) {
         this.width = width;
         this.height = height;
         this.depth = (float)index/(n)+0.00001f;
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
     }
 
     public void generate(int x, int y){

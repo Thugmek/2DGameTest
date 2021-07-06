@@ -8,7 +8,7 @@ import resources.TextureGroup;
 
 public class Sprite {
     private Model model;
-    private TextureGroup texture;
+    private Texture texture;
 
     public Sprite(Texture tex){
         model = new Model(new float[]{
@@ -25,6 +25,8 @@ public class Sprite {
 
         model.setPos(new Vector2f(0,0));
 
+        texture = tex;
+
     }
 
     public void setPos(Vector2f pos){
@@ -38,5 +40,9 @@ public class Sprite {
     public void render(){
         //texture.bind();
         model.render();
+    }
+
+    public String getTextureName(){
+        return texture.getName();
     }
 }

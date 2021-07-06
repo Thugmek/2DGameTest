@@ -2,7 +2,9 @@ package world;
 
 import gameobjects.Wall;
 
-public class WorldMapTile {
+import java.io.Serializable;
+
+public class WorldMapTile implements Serializable {
     public Wall wall = null;
     public Biome biome;
     public WorldMapTile(){

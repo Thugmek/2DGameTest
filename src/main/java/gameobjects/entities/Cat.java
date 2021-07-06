@@ -5,7 +5,7 @@ import resources.ResourceManager;
 import world.WorldMap;
 
 public class Cat extends Entity {
-    public Cat(WorldMap map) {
-        super(new Sprite(ResourceManager.getTexture("cat")), map);
+    public Cat() {
+        super(new Sprite(ResourceManager.getTexture("cat")));
     }
 }

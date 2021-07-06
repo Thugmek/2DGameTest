@@ -1,5 +1,8 @@
 package window.gameStates;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import gameobjects.GameObject;
 import gameobjects.Sprite;
 import gameobjects.entities.Cat;
 import gameobjects.entities.Entity;
@@ -13,17 +16,18 @@ import resources.Shader;
 import resources.TextureDefinition;
 import resources.TextureGroup;
 import runners.Game;
-import serializers.MapSerializer;
+import serializers.*;
+import serializers.gameobjects.SEntity;
 import util.TestWallsBuilder;
 import window.Camera;
 import window.Window;
 import world.Biome;
 import world.WorldMap;
 import world.WorldMapChunk;
+import world.WorldMapTile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.io.*;
+import java.util.*;
 
 public class SaveGameState extends GameState {
     private Window w = Game.getWindow();
@@ -38,6 +42,8 @@ public class SaveGameState extends GameState {
     private TextureGroup loadingScreen;
     private Sprite loadingScreenSprite;
 
+    private String file = "saves/save.bin";
+
     public SaveGameState(){
         List<TextureDefinition> texs = new ArrayList<>();
         texs.add(new TextureDefinition("image","graphics\\loadingScreen.png"));
@@ -46,25 +52,110 @@ public class SaveGameState extends GameState {
         shader.setUniform1i("sampler", 0);
         c.forShader(shader);
         shader.setShaderMode(3);
-
-        MapSerializer.serialize(Game.map,"saves/save.txt");
     }
 
     @Override
     public void update() {
-        progress += 0.01f;
         mesage = "Saving...";
         renderProgress();
 
-        if(progress > 1) Game.gameState = new MenuGameState();
+        Dictionary<Integer, Dictionary<Integer, WorldMapChunk>> rows = map.getDictionary();
+
+        SWorldMap sMap = new SWorldMap();
+
+        Enumeration<Integer> rowKeys = rows.keys();
+
+        while (rowKeys.hasMoreElements()){
+            Integer rowIndex = rowKeys.nextElement();
+            Dictionary<Integer, WorldMapChunk> cells = rows.get(rowIndex);
+            SWorldMapChunksRow sRows = new SWorldMapChunksRow(rowIndex);
+            sMap.getChunkRows().add(sRows);
+
+            Enumeration<Integer> cellKeys = cells.keys();
+            while (cellKeys.hasMoreElements()){
+                Integer cellIndex = cellKeys.nextElement();
+                WorldMapChunk chunk = cells.get(cellIndex);
+                SWorldMapChunk sChunk = new SWorldMapChunk(cellIndex);
+                sRows.getChunks().add(sChunk);
+
+                WorldMapTile[][] chunkArray = chunk.getTiles();
+                SWorldMapTile[][] sChunkArray = new SWorldMapTile[WorldMapChunk.CHUNK_SIZE][WorldMapChunk.CHUNK_SIZE];
+
+                for(int i = 0;i<WorldMapChunk.CHUNK_SIZE;i++){
+                    for(int j = 0;j<WorldMapChunk.CHUNK_SIZE;j++){
+                        SWorldMapTile sTile = new SWorldMapTile();
+                        sTile.biome = EnumConvertor.serializeBiome(chunkArray[i][j].biome);
+                        sTile.wall = EnumConvertor.serializeWall(chunkArray[i][j].wall);
+                        sChunkArray[i][j] = sTile;
+                    }
+                }
+
+                sChunk.setTiles(sChunkArray);
+                for(GameObject g:chunk.getGameObjects()) {
+                    sChunk.getGameObjects().add(g.serialize());
+                }
+            }
+        }
+
+        progress = 0.1f;
+        mesage = "Serializing...";
+        renderProgress();
+
+        /*GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        String json = gson.toJson(sMap);
+        //System.out.println(json);
+
+        progress = 0.6f;
+        mesage = "Saving to file";
+        renderProgress();
+
+        try
+        {
+            FileWriter bw = new FileWriter("src/main/resources/" + file);
+            bw.write(json);
+            bw.flush();
+            bw.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }*/
+
+        // Serialization
+        try
+        {
+            //Saving of object in a file
+            FileOutputStream f = new FileOutputStream("src/main/resources/" + file);
+            ObjectOutputStream out = new ObjectOutputStream(f);
+
+            // Method for serialization of object
+            out.writeObject(sMap);
+
+            out.close();
+            f.close();
+
+            System.out.println("Object has been serialized");
+
+        }
+
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        progress = 1f;
+        mesage = "Saved";
+        renderProgress();
+        Game.gameState = new MenuGameState();
     }
 
     @Override
     public void gui() {
         int width = Game.getWindow().getWidth();
         int height = Game.getWindow().getHeight();
-        ImGui.setNextWindowPos((width/2)-150,(height/2)-50);
-        ImGui.setNextWindowSize(300,100);
+        ImGui.setNextWindowPos((width/2)-150,(height/2)-60);
+        ImGui.setNextWindowSize(300,120);
         ImGui.begin("Saving", ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoCollapse);
         ImGui.progressBar(progress);
         ImGui.labelText("",mesage);
