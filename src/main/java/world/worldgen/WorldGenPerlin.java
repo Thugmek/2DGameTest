@@ -1,15 +1,17 @@
-package world;
+package world.worldgen;
 
 import org.joml.Vector2f;
 import util.Randomizers;
+import world.Biome;
+import world.WorldMapTile;
 
-public class WorldGenAlg {
+public class WorldGenPerlin implements WorldGen {
     public static long seed = 2135432135431l;
 
-    public static WorldMapTile getTile(int x, int y){
+    public WorldMapTile getTile(int x, int y){
         WorldMapTile tile = new WorldMapTile();
         float value = perlin(x,y,537,(int)seed);
-        tile.biome = value>0?(value>0.3?Biome.FORREST:Biome.SNOW):(value>-0.3?Biome.MEADOW:Biome.DESERT);
+        tile.biome = value>0?(value>0.3? Biome.FORREST:Biome.SNOW):(value>-0.3?Biome.MEADOW:Biome.DESERT);
         return tile;
     }
 

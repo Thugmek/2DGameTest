@@ -71,8 +71,8 @@ public class NewWorldGameState extends GameState {
 
             Biome.MEADOW.texture = ResourceManager.getTexture("grass");
             Biome.DESERT.texture = ResourceManager.getTexture("sand");
-            Biome.SNOW.texture = ResourceManager.getTexture("dirt");
-            Biome.FORREST.texture = ResourceManager.getTexture("snow");
+            Biome.SNOW.texture = ResourceManager.getTexture("snow");
+            Biome.FORREST.texture = ResourceManager.getTexture("dirt");
 
             CursorInput.init();
 

@@ -2,13 +2,14 @@ package world;
 
 import gameobjects.GameObject;
 import gameobjects.Model;
-import gameobjects.Wall;
 import org.joml.Vector2f;
-import org.joml.Vector2i;
 import resources.ResourceManager;
 import resources.Texture;
 import resources.WallMapper;
 import runners.Game;
+import world.worldgen.WorldGen;
+import world.worldgen.WorldGenPerlin;
+import world.worldgen.WorldGenVonoroi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ public class WorldMapChunk {
     private Model model;
     private Texture texture2;
 
+    private WorldGen worldGen = new WorldGenVonoroi();
+
     public WorldMapChunk(int x, int y){
         texture2 = ResourceManager.getTexture("walls");
         this.x = x;
@@ -44,7 +47,7 @@ public class WorldMapChunk {
         WorldMapTile[][] tiles = new WorldMapTile[CHUNK_SIZE][CHUNK_SIZE];
         for(int i = 0;i<CHUNK_SIZE;i++){
             for(int j = 0;j<CHUNK_SIZE;j++){
-                tiles[i][j] = WorldGenAlg.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j);
+                tiles[i][j] = worldGen.getTile(x*CHUNK_SIZE + i, y*CHUNK_SIZE + j);
             }
         }
         return tiles;
